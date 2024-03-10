@@ -1,18 +1,19 @@
-import { Navigate } from "react-router-dom";
-import { lazy } from "react";
 import Home from "@/pages/Home";
-import { Suspense } from "react";
+
+import { Navigate } from "react-router-dom";
+import { lazy, Suspense } from "react";
+import NotFoundPage from "@/pages/NotFoundPage";
+import LoginPage from "@/pages/loginPage/LoginPage";
 import Page3Sub1 from "@/pages/Page3Sub1";
 import Page3Sub2 from "@/pages/Page3Sub2";
 import Page3Sub3 from "@/pages/Page3Sub3";
-import LoginPage from "@/pages/loginPage/LoginPage";
 
-const Page1 = lazy(() => import("@/pages/Page1"));
 const Page2 = lazy(() => import("@/pages/Page2"));
-const NotFoundPage = lazy(() => import("@/pages/NotFoundPage"));
-const loadingSuspense = (component: JSX.Element) => (
-  <Suspense fallback={<div>loading....</div>}>{component}</Suspense>
-);
+const Page1 = lazy(() => import("@/pages/Page1"));
+
+const suspenseWrap = (component: JSX.Element) => {
+  return <Suspense fallback={<div>loading.....</div>}>{component}</Suspense>;
+};
 const routes = [
   {
     path: "/",
@@ -21,27 +22,30 @@ const routes = [
   {
     path: "/",
     element: <Home />,
-
     children: [
       {
         path: "/page1",
-        element: loadingSuspense(<Page1 />),
+        element: suspenseWrap(<Page1 />),
       },
       {
         path: "/page2",
-        element: loadingSuspense(<Page2 />),
+        element: suspenseWrap(<Page2 />),
+      },
+      {
+        path: "/page3",
+        element: <Navigate to="/page3/page301" />,
       },
       {
         path: "/page3/page301",
-        element: loadingSuspense(<Page3Sub1 />),
+        element: suspenseWrap(<Page3Sub1 />),
       },
       {
         path: "/page3/page302",
-        element: loadingSuspense(<Page3Sub2 />),
+        element: suspenseWrap(<Page3Sub2 />),
       },
       {
         path: "/page3/page303",
-        element: loadingSuspense(<Page3Sub3 />),
+        element: suspenseWrap(<Page3Sub3 />),
       },
     ],
   },
@@ -51,16 +55,8 @@ const routes = [
   },
   {
     path: "*",
-    element: loadingSuspense(<NotFoundPage />),
+    element: <NotFoundPage />,
   },
-  // {
-  //   path: "/home",
-  //   element: <Home />,
-  // },
-  // {
-  //   path: "/about",
-  //   element: loadingSuspense(<About />),
-  // },
 ];
 
 export default routes;
