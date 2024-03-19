@@ -3,8 +3,10 @@ import axios from "axios";
 import Setting from "@/setting";
 // 创建一个 axios 实例
 const service = axios.create({
-  baseURL: Setting.apiBaseURL,
+  // baseURL: Setting.apiBaseURL,
+  baseURL: Setting.apiStagingURL,
   timeout: 10000, // 请求超时时间
+
 });
 
 // 请求拦截器
@@ -20,14 +22,13 @@ service.interceptors.request.use(
 // 响应拦截器
 service.interceptors.response.use(
   (response) => {
-    console.log("checkout response => ", response);
     const code = response.status;
     switch (code) {
       case 200:
         return response.data;
       // [ 示例 ] code === 0 代表没有错误
 
-      case 400:
+      case 40000:
       case 400011:
       case 400012:
         return Promise.reject(response.data || { msg: "未知错误" });
@@ -43,12 +44,13 @@ service.interceptors.response.use(
     }
   },
   (error) => {
+
     if (error && error.response) {
       switch (error.response.status) {
         case 400:
           error.message = "请求错误";
           break;
-        case 401:
+        case 40000:
           error.message = "未授权，请登录";
           break;
         case 403:

@@ -1,8 +1,16 @@
 import HttpRequest from "@/utils/httpRequest";
 
-export const testApi = (data: number = 1) => {
+export const serverHealthCheck = () => {
   return HttpRequest({
-    url: `/${data}`,
+    url:"/health",
+    method: "get",
+  });
+};
+
+
+export const serverAuthCheck = () => {
+  return HttpRequest({
+    url:"/health/auth",
     method: "get",
   });
 };

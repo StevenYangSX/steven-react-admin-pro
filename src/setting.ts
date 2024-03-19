@@ -1,8 +1,8 @@
 // const VUE_APP_API_URL = process.env.VUE_APP_BASEURL;
 // const VUE_APP_STAGINGBASEURL = process.env.VUE_APP_STAGINGBASEURL;
 
-const VUE_APP_API_URL = "https://jsonplaceholder.typicode.com/posts";
-const VUE_APP_STAGINGBASEURL = "https://jsonplaceholder.typicode.com/posts";
+const VUE_APP_API_URL = "http://52.88.35.70:8081";
+const VUE_APP_STAGINGBASEURL = "http://localhost:8000";
 
 const Setting = {
   routerMode: "history",
