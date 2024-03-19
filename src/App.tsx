@@ -1,7 +1,8 @@
 import { useRoutes, useLocation, useNavigate } from "react-router-dom";
 import routes from "@/router/routes";
 import { useEffect, useState } from "react";
-
+import { serverHealthCheck, serverAuthCheck } from "@/api/apiTest";
+import { Alert } from "antd";
 // const ToHomePage = () => {
 //   const navigateTo = useNavigate();
 //   useEffect(() => {
@@ -56,9 +57,49 @@ const BeforeRouterEnter = () => {
   }
   return outlet;
 };
+
 function App() {
+  const onClose = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    console.log(e, "I was closed.");
+  };
+
+  const [serverStatus, setServerStatus] = useState(false);
+  const [message, setMessage] = useState(null);
+
+  const serverCheck = async () => {
+    try {
+      const response: any = await serverHealthCheck();
+      setServerStatus(true);
+      setMessage(response.message);
+    } catch (error: any) {
+      console.log("error111=>", error);
+      setMessage(error.message);
+    }
+  };
+
+  const serverAuth = async () => {
+    try {
+      const response = await serverAuthCheck();
+      console.log("response...", response);
+      setMessage(response.data.message);
+    } catch (error: any) {
+      console.log("error222=>", error);
+      setMessage(error.message);
+    }
+  };
+
+  useEffect(() => {
+    serverCheck();
+    //serverAuth();
+  }, []);
   return (
     <>
+      <Alert
+        message={message}
+        type={serverStatus ? "success" : "error"}
+        closable
+        onClose={onClose}
+      />
       <BeforeRouterEnter />
     </>
   );
