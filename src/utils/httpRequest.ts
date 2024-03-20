@@ -1,6 +1,10 @@
 import axios from "axios";
 
+
+axios.defaults.validateStatus = customValidateStatus;
+
 import Setting from "@/setting";
+import customValidateStatus from "./customValidateStatus";
 // 创建一个 axios 实例
 const service = axios.create({
   // baseURL: Setting.apiBaseURL,
@@ -31,6 +35,7 @@ service.interceptors.response.use(
       case 40000:
       case 400011:
       case 400012:
+        //return Promise.reject(response.data || { msg: "未知错误" });
         return Promise.reject(response.data || { msg: "未知错误" });
       // [ 示例 ] 其它和后台约定的 code
       // errorCreate(response.data.msg);
@@ -44,7 +49,6 @@ service.interceptors.response.use(
     }
   },
   (error) => {
-
     if (error && error.response) {
       switch (error.response.status) {
         case 400:

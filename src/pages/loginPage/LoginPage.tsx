@@ -1,34 +1,48 @@
-import {
-  AlipayOutlined,
-  LockOutlined,
-  MobileOutlined,
-  TaobaoOutlined,
-  UserOutlined,
-  WeiboOutlined,
-} from "@ant-design/icons";
+import { loginApi } from "@/api/authentication";
+import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import {
   LoginFormPage,
   ProConfigProvider,
-  ProFormCaptcha,
   ProFormCheckbox,
   ProFormText,
 } from "@ant-design/pro-components";
-import { Button, Divider, Space, Tabs, message, theme } from "antd";
-import type { CSSProperties } from "react";
+import { Button, message, theme } from "antd";
 import { useState } from "react";
+
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { userLogin } from "@/store/userInfoSlice";
 
 type LoginType = "phone" | "account";
 
-const iconStyles: CSSProperties = {
-  color: "rgba(0, 0, 0, 0.2)",
-  fontSize: "18px",
-  verticalAlign: "middle",
-  cursor: "pointer",
-};
-
 const Page = () => {
-  const [loginType, setLoginType] = useState<LoginType>("phone");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [loginType, setLoginType] = useState<LoginType>("account");
+  const [messageApi, contextHolder] = message.useMessage();
   const { token } = theme.useToken();
+
+  const onSubmit = (p1: any) => {
+    console.log("111", p1);
+    let payload = { username: p1.username, password: p1.password };
+
+    loginApi(payload)
+      .then((res) => {
+        //TODO after login success
+        // 1. update store, set login => true, set userInfo => user, set token => token...
+        console.log("login res...", res.data.token);
+
+        dispatch(userLogin(res.data.token));
+        navigate("/");
+      })
+      .catch((err) => {
+        console.log("err...", err);
+        messageApi.open({
+          type: "error",
+          content: err.message,
+        });
+      });
+  };
   return (
     <div
       style={{
@@ -36,7 +50,12 @@ const Page = () => {
         height: "100vh",
       }}
     >
+      {contextHolder}
       <LoginFormPage
+        onFinish={async (values) => {
+          await onSubmit(values);
+          return true;
+        }}
         backgroundImageUrl="https://mdn.alipayobjects.com/huamei_gcee1x/afts/img/A*y0ZTS6WLwvgAAAAAAAAAAAAADml6AQ/fmt.webp"
         logo="https://github.githubassets.com/images/modules/logos_page/Octocat.png"
         backgroundVideoUrl="https://gw.alipayobjects.com/v/huamei_gcee1x/afts/video/jXRBRK_VAwoAAAAAAAAAAAAAK4eUAQBr"
@@ -70,81 +89,15 @@ const Page = () => {
             </Button>
           ),
         }}
-        actions={
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              flexDirection: "column",
-            }}
-          >
-            <Divider plain>
-              <span
-                style={{
-                  color: token.colorTextPlaceholder,
-                  fontWeight: "normal",
-                  fontSize: 14,
-                }}
-              >
-                其他登录方式
-              </span>
-            </Divider>
-            <Space align="center" size={24}>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  flexDirection: "column",
-                  height: 40,
-                  width: 40,
-                  border: "1px solid " + token.colorPrimaryBorder,
-                  borderRadius: "50%",
-                }}
-              >
-                <AlipayOutlined style={{ ...iconStyles, color: "#1677FF" }} />
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  flexDirection: "column",
-                  height: 40,
-                  width: 40,
-                  border: "1px solid " + token.colorPrimaryBorder,
-                  borderRadius: "50%",
-                }}
-              >
-                <TaobaoOutlined style={{ ...iconStyles, color: "#FF6A10" }} />
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  flexDirection: "column",
-                  height: 40,
-                  width: 40,
-                  border: "1px solid " + token.colorPrimaryBorder,
-                  borderRadius: "50%",
-                }}
-              >
-                <WeiboOutlined style={{ ...iconStyles, color: "#1890ff" }} />
-              </div>
-            </Space>
-          </div>
-        }
       >
-        <Tabs
+        {/* <Tabs
           centered
           activeKey={loginType}
           onChange={(activeKey) => setLoginType(activeKey as LoginType)}
         >
           <Tabs.TabPane key={"account"} tab={"账号密码登录"} />
           <Tabs.TabPane key={"phone"} tab={"手机号登录"} />
-        </Tabs>
+        </Tabs> */}
         {loginType === "account" && (
           <>
             <ProFormText
@@ -160,11 +113,11 @@ const Page = () => {
                   />
                 ),
               }}
-              placeholder={"用户名: admin or user"}
+              placeholder={"User name"}
               rules={[
                 {
                   required: true,
-                  message: "请输入用户名!",
+                  message: "Please enter username!",
                 },
               ]}
             />
@@ -185,74 +138,13 @@ const Page = () => {
               rules={[
                 {
                   required: true,
-                  message: "请输入密码！",
+                  message: "Please enter password！",
                 },
               ]}
             />
           </>
         )}
-        {loginType === "phone" && (
-          <>
-            <ProFormText
-              fieldProps={{
-                size: "large",
-                prefix: (
-                  <MobileOutlined
-                    style={{
-                      color: token.colorText,
-                    }}
-                    className={"prefixIcon"}
-                  />
-                ),
-              }}
-              name="mobile"
-              placeholder={"手机号"}
-              rules={[
-                {
-                  required: true,
-                  message: "请输入手机号！",
-                },
-                {
-                  pattern: /^1\d{10}$/,
-                  message: "手机号格式错误！",
-                },
-              ]}
-            />
-            <ProFormCaptcha
-              fieldProps={{
-                size: "large",
-                prefix: (
-                  <LockOutlined
-                    style={{
-                      color: token.colorText,
-                    }}
-                    className={"prefixIcon"}
-                  />
-                ),
-              }}
-              captchaProps={{
-                size: "large",
-              }}
-              placeholder={"请输入验证码"}
-              captchaTextRender={(timing, count) => {
-                if (timing) {
-                  return `${count} ${"获取验证码"}`;
-                }
-                return "获取验证码";
-              }}
-              name="captcha"
-              rules={[
-                {
-                  required: true,
-                  message: "请输入验证码！",
-                },
-              ]}
-              onGetCaptcha={async () => {
-                message.success("获取验证码成功！验证码为：1234");
-              }}
-            />
-          </>
-        )}
+
         <div
           style={{
             marginBlockEnd: 24,

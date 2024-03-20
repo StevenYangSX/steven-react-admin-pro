@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit'
 import reducer from './reducer'
+import counterReducer  from './userInfoSlice'
 // ...
 
 // export const store = configureStore({
@@ -12,9 +13,20 @@ import reducer from './reducer'
 
 export const store = configureStore({
     reducer: {
-     testReducer:reducer
+     testReducer:reducer,
+     userInfoReducer:counterReducer 
     },
   })
+
+  // Subscribe to store changes and save to localStorage
+store.subscribe(() => {
+ const currentState = store.getState();
+ if(currentState.userInfoReducer.token) {
+    localStorage.setItem('userToken',currentState.userInfoReducer.token)
+ }
+
+});
+
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>
