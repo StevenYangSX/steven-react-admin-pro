@@ -3,6 +3,7 @@ import routes from "@/router/routes";
 import { useEffect, useState } from "react";
 import { serverHealthCheck, serverAuthCheck } from "@/api/apiTest";
 import { Alert } from "antd";
+import useAuthentication from "./hooks/useAuthentication";
 // const ToHomePage = () => {
 //   const navigateTo = useNavigate();
 //   useEffect(() => {
@@ -36,13 +37,14 @@ const BeforeRouterEnter = () => {
   // if (currentPath.pathname !== "/login" && !isAuthenticated) {
   //   return <ToLoginPage />;
   // }
+  const isAuthenticated = useAuthentication();
 
   const navigate = useNavigate();
 
   useEffect(() => {
     // Perform any logic before entering the route
     // For example, you can check if the user is authenticated
-    const isAuthenticated = true;
+
     if (currentPath.pathname === "/login" && isAuthenticated) {
       return navigate("/page1");
     }
