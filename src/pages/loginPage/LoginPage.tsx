@@ -18,7 +18,7 @@ type LoginType = "phone" | "account";
 const Page = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [loginType, setLoginType] = useState<LoginType>("account");
+  const [loginType] = useState<LoginType>("account");
   const [messageApi, contextHolder] = message.useMessage();
   const { token } = theme.useToken();
 

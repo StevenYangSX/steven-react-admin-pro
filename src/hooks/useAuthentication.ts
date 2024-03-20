@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
 import type { RootState } from "@/store/index";
 
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
-import { decrement, increment } from "@/store/userInfoSlice";
 
 export default function useAuthentication() {
   const [authenticated, setAuthenticated] = useState(false);

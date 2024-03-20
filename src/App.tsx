@@ -1,7 +1,7 @@
 import { useRoutes, useLocation, useNavigate } from "react-router-dom";
 import routes from "@/router/routes";
 import { useEffect, useState } from "react";
-import { serverHealthCheck, serverAuthCheck } from "@/api/apiTest";
+import { serverHealthCheck } from "@/api/apiTest";
 import { Alert } from "antd";
 import useAuthentication from "./hooks/useAuthentication";
 // const ToHomePage = () => {
@@ -79,16 +79,16 @@ function App() {
     }
   };
 
-  const serverAuth = async () => {
-    try {
-      const response = await serverAuthCheck();
-      console.log("response...", response);
-      setMessage(response.data.message);
-    } catch (error: any) {
-      console.log("error222=>", error);
-      setMessage(error.message);
-    }
-  };
+  // const serverAuth = async () => {
+  //   try {
+  //     const response = await serverAuthCheck();
+  //     console.log("response...", response);
+  //     setMessage(response.data.message);
+  //   } catch (error: any) {
+  //     console.log("error222=>", error);
+  //     setMessage(error.message);
+  //   }
+  // };
 
   useEffect(() => {
     serverCheck();
