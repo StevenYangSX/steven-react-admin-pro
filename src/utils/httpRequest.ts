@@ -7,8 +7,8 @@ import Setting from "@/setting";
 import customValidateStatus from "./customValidateStatus";
 // 创建一个 axios 实例
 const service = axios.create({
-  // baseURL: Setting.apiBaseURL,
-  baseURL: Setting.apiStagingURL,
+  baseURL: Setting.apiBaseURL,
+  // baseURL: Setting.apiStagingURL,
   timeout: 10000, // 请求超时时间
 
 });
