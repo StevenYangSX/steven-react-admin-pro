@@ -5,6 +5,7 @@ axios.defaults.validateStatus = customValidateStatus;
 
 import Setting from "@/setting";
 import customValidateStatus from "./customValidateStatus";
+import { store } from "@/store";
 // 创建一个 axios 实例
 const service = axios.create({
   // baseURL: Setting.apiBaseURL,
@@ -16,6 +17,10 @@ const service = axios.create({
 // 请求拦截器
 service.interceptors.request.use(
   async (config) => {
+    let currentUserInfo = store.getState().userInfoReducer.userInfo
+    if(currentUserInfo) {
+        config.headers['Authorization'] = 'Bearer ' + store.getState().userInfoReducer.token
+    }
     return config;
   },
   (error) => {
@@ -26,13 +31,16 @@ service.interceptors.request.use(
 // 响应拦截器
 service.interceptors.response.use(
   (response) => {
+    console.log("response...........",response)
     const code = response.status;
-    switch (code) {
+    const ApiStatusCode = response.data.statusCode;
+    switch (ApiStatusCode) {
       case 200:
         return response.data;
       // [ 示例 ] code === 0 代表没有错误
 
       case 40000:
+      case 400001:
       case 400011:
       case 400012:
         //return Promise.reject(response.data || { msg: "未知错误" });
@@ -49,6 +57,7 @@ service.interceptors.response.use(
     }
   },
   (error) => {
+    console.log("sdfsfdsfsfd",error)
     if (error && error.response) {
       switch (error.response.status) {
         case 400:

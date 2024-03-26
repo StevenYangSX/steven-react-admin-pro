@@ -3,12 +3,16 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 
 export interface CounterState {
   token:string | null
-  value: number
+  value: number,
+  userInfo: object | null,
+  expiredTime:number | null
 }
 
 const initialState: CounterState = {
   value: 0,
-  token:localStorage.getItem('userToken') ??  null
+  token:localStorage.getItem('userToken') ??  null,
+  userInfo:null,
+  expiredTime:null
 }
 
 
@@ -16,10 +20,15 @@ export const userInfoSlice = createSlice({
   name: 'counter',
   initialState,
   reducers: {
-    userLogin: (state ,action:PayloadAction<string>) =>{
+    userLogin: (state ,action:PayloadAction<any>) =>{
       console.log("resucdre..",state)
       console.log("resucdre..",action)
-      state.token = action.payload
+      state.token = action.payload.token
+      state.userInfo = action.payload.user
+    },
+    userLogout:(state,action)=>{
+      state = initialState;
+      state.token = null;
     },
     increment: (state) => {
       // Redux Toolkit allows us to write "mutating" logic in reducers. It

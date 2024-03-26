@@ -1,4 +1,5 @@
 import { loginApi } from "@/api/authentication";
+import { getSystemMenusApi } from "@/api/systemMenu";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import {
   LoginFormPage,
@@ -7,7 +8,7 @@ import {
   ProFormText,
 } from "@ant-design/pro-components";
 import { Button, message, theme } from "antd";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -21,28 +22,39 @@ const Page = () => {
   const [loginType, setLoginType] = useState<LoginType>("account");
   const [messageApi, contextHolder] = message.useMessage();
   const { token } = theme.useToken();
+  const [loggedIn, setLoggedIn] = useState(false);
 
+  const getSystemMenu = async () => {
+    try {
+      const response = await getSystemMenusApi();
+      //TODO 根据用户的menuList 和 系统全部的menuList 完成路由部分 设计！ （动态路由 路由表 权限控制）
+    } catch (error) {
+      console.log("menu error...", error);
+    }
+  };
+  useEffect(() => {
+    if (loggedIn) {
+      getSystemMenu();
+    }
+    navigate("/");
+  }, [loggedIn]);
   const onSubmit = (p1: any) => {
     console.log("111", p1);
     let payload = { username: p1.username, password: p1.password };
 
     loginApi(payload)
       .then((res) => {
-        //TODO after login success
-        // 1. update store, set login => true, set userInfo => user, set token => token...
-        console.log("login res...", res.data.token);
-
-        dispatch(userLogin(res.data.token));
-        navigate("/");
+        dispatch(userLogin(res.data));
+        setLoggedIn(true);
       })
       .catch((err) => {
-        console.log("err...", err);
         messageApi.open({
           type: "error",
           content: err.message,
         });
       });
   };
+
   return (
     <div
       style={{
