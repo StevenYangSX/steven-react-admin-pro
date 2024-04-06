@@ -23,7 +23,7 @@ import useAuthentication from "./hooks/useAuthentication";
 const BeforeRouterEnter = () => {
   const currentPath = useLocation();
   const outlet = useRoutes(routes);
-  const [shouldRender, setShouldRender] = useState(false);
+  // const [shouldRender, setShouldRender] = useState(false);
   /*
   User Authentication Rules
   1. if authenticated, and visti /login page, then direct to /home
@@ -37,33 +37,28 @@ const BeforeRouterEnter = () => {
   // if (currentPath.pathname !== "/login" && !isAuthenticated) {
   //   return <ToLoginPage />;
   // }
-  const isAuthenticated = useAuthentication();
+  const { loading, authenticated } = useAuthentication();
 
   const navigate = useNavigate();
 
   useEffect(() => {
     // Perform any logic before entering the route
     // For example, you can check if the user is authenticated
-
-    if (currentPath.pathname === "/login" && isAuthenticated) {
-      return navigate("/page1");
+    if (!loading) {
+      if (currentPath.pathname === "/login" && authenticated) {
+        return navigate("/home");
+      }
+      if (currentPath.pathname !== "/login" && !authenticated) {
+        return navigate("/login");
+      }
     }
-    if (currentPath.pathname !== "/login" && !isAuthenticated) {
-      return navigate("/login");
-    }
-    setShouldRender(true);
-  }, [currentPath.pathname, navigate]);
+  }, [currentPath.pathname, authenticated, loading]);
 
-  if (!shouldRender) {
-    return null; // or any placeholder component or loading indicator
-  }
   return outlet;
 };
 
 function App() {
-  const onClose = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    console.log(e, "I was closed.");
-  };
+  const onClose = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {};
 
   const [serverStatus, setServerStatus] = useState(false);
   const [message, setMessage] = useState(null);
@@ -74,7 +69,6 @@ function App() {
       setServerStatus(true);
       setMessage(response.message);
     } catch (error: any) {
-      console.log("error111=>", error);
       setMessage(error.message);
     }
   };
@@ -82,10 +76,9 @@ function App() {
   const serverAuth = async () => {
     try {
       const response = await serverAuthCheck();
-      console.log("response...", response);
+
       setMessage(response.data.message);
     } catch (error: any) {
-      console.log("error222=>", error);
       setMessage(error.message);
     }
   };

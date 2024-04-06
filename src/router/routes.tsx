@@ -17,34 +17,38 @@ const suspenseWrap = (component: JSX.Element) => {
 const routes = [
   {
     path: "/",
-    element: <Navigate to="/page1" />,
+    element: <Navigate to="/home" />,
   },
   {
     path: "/",
     element: <Home />,
     children: [
       {
-        path: "/page1",
+        path: "/home",
         element: suspenseWrap(<Page1 />),
       },
+      // {
+      //   path: "/page2",
+      //   element: suspenseWrap(<Page2 />),
+      // },
       {
-        path: "/page2",
-        element: suspenseWrap(<Page2 />),
+        path: "/product",
+        element: <Navigate to="/product/add" />,
       },
       {
-        path: "/page3",
-        element: <Navigate to="/page3/page301" />,
-      },
-      {
-        path: "/page3/page301",
+        path: "/product/add",
         element: suspenseWrap(<Page3Sub1 />),
       },
       {
-        path: "/page3/page302",
+        path: "/product/category",
         element: suspenseWrap(<Page3Sub2 />),
       },
       {
-        path: "/page3/page303",
+        path: "/order",
+        element: <Navigate to="/order/list" />,
+      },
+      {
+        path: "/order/list",
         element: suspenseWrap(<Page3Sub3 />),
       },
     ],

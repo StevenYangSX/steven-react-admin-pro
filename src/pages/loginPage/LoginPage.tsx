@@ -12,7 +12,7 @@ import { useState, useEffect } from "react";
 
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { userLogin } from "@/store/userInfoSlice";
+import { userLogin, systemMenuUpdate } from "@/store/userInfoSlice";
 
 type LoginType = "phone" | "account";
 
@@ -27,19 +27,18 @@ const Page = () => {
   const getSystemMenu = async () => {
     try {
       const response = await getSystemMenusApi();
+
       //TODO 根据用户的menuList 和 系统全部的menuList 完成路由部分 设计！ （动态路由 路由表 权限控制）
-    } catch (error) {
-      console.log("menu error...", error);
-    }
+      dispatch(systemMenuUpdate(response.data));
+    } catch (error) {}
   };
   useEffect(() => {
     if (loggedIn) {
       getSystemMenu();
+      // navigate("/");
     }
-    navigate("/");
   }, [loggedIn]);
   const onSubmit = (p1: any) => {
-    console.log("111", p1);
     let payload = { username: p1.username, password: p1.password };
 
     loginApi(payload)
@@ -113,6 +112,7 @@ const Page = () => {
         {loginType === "account" && (
           <>
             <ProFormText
+              initialValue="admin"
               name="username"
               fieldProps={{
                 size: "large",
@@ -134,6 +134,7 @@ const Page = () => {
               ]}
             />
             <ProFormText.Password
+              initialValue="password"
               name="password"
               fieldProps={{
                 size: "large",

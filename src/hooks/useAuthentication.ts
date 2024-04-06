@@ -1,23 +1,25 @@
 import { useState, useEffect } from 'react';
 import type { RootState } from "@/store/index";
 
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
-import { decrement, increment } from "@/store/userInfoSlice";
 
 export default function useAuthentication() {
   const [authenticated, setAuthenticated] = useState(false);
+  const [loading,setLoading] = useState(true);
   const userToken = useSelector((state:RootState) => state.userInfoReducer.token)
-
+  const userInfo = useSelector((state:RootState) =>state.userInfoReducer.userInfo )
   useEffect(() => {
-    if(userToken) setAuthenticated(true)
-    else setAuthenticated(false)    
-
+    if(userToken && userInfo) {
+      setAuthenticated(true);
+    } else {
+      setAuthenticated(false)   
+    }
+    setLoading(false);
 
   }, [userToken]);
 
- 
-  return authenticated;
+  return {authenticated,loading};
 }
 
 

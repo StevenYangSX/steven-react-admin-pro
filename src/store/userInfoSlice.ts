@@ -1,18 +1,39 @@
+import { SysterUserInfo } from '@/types/systemDataTypes'
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
+import { act } from 'react-dom/test-utils'
 
 export interface CounterState {
   token:string | null
   value: number,
-  userInfo: object | null,
-  expiredTime:number | null
+  userInfo: SysterUserInfo | null,
+  expiredTime:number | null,
+  menuList: Array<any> | null
+}
+const getUserInfoFromLocalStorage = () =>{
+  let temp = localStorage.getItem('userInfo');
+  if(temp) {
+    return JSON.parse(temp);
+  } else {
+    return null
+  }
+}
+
+const getMenuListFromLocalStorage = () =>{
+  let temp = localStorage.getItem('menuList');
+  if(temp) {
+    return JSON.parse(temp);
+  } else {
+    return null
+  }
 }
 
 const initialState: CounterState = {
   value: 0,
   token:localStorage.getItem('userToken') ??  null,
-  userInfo:null,
-  expiredTime:null
+  userInfo:  getUserInfoFromLocalStorage(),
+  expiredTime:null,
+  menuList: getMenuListFromLocalStorage(),
 }
 
 
@@ -21,32 +42,25 @@ export const userInfoSlice = createSlice({
   initialState,
   reducers: {
     userLogin: (state ,action:PayloadAction<any>) =>{
-      console.log("resucdre..",state)
-      console.log("resucdre..",action)
+      let userInfoWithAccess = action.payload.user;
+      userInfoWithAccess.access = action.payload.uniqueAuth;
       state.token = action.payload.token
-      state.userInfo = action.payload.user
+      state.userInfo =  userInfoWithAccess
     },
     userLogout:(state,action)=>{
       state = initialState;
       state.token = null;
+      state.userInfo = null
     },
-    increment: (state) => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
-      state.value += 1
+    
+    systemMenuUpdate: (state, action: PayloadAction<any>) => {
+      state.menuList= action.payload
     },
-    decrement: (state) => {
-      state.value -= 1
-    },
-    incrementByAmount: (state, action: PayloadAction<number>) => {
-      state.value += action.payload
-    },
+
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { increment, decrement, incrementByAmount,userLogin } = userInfoSlice.actions
+export const {  userLogin ,systemMenuUpdate } = userInfoSlice.actions
 
 export default userInfoSlice.reducer

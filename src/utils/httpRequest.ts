@@ -31,7 +31,6 @@ service.interceptors.request.use(
 // 响应拦截器
 service.interceptors.response.use(
   (response) => {
-    console.log("response...........",response)
     const code = response.status;
     const ApiStatusCode = response.data.statusCode;
     switch (ApiStatusCode) {
@@ -57,7 +56,6 @@ service.interceptors.response.use(
     }
   },
   (error) => {
-    console.log("sdfsfdsfsfd",error)
     if (error && error.response) {
       switch (error.response.status) {
         case 400:
