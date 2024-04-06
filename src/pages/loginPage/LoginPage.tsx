@@ -12,7 +12,7 @@ import { useState, useEffect } from "react";
 
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { userLogin, systemMenuUpdate } from "@/store/userInfoSlice";
+import { userLogin, systemMenuUpdate } from "@/store/slices/userInfoSlice";
 
 type LoginType = "phone" | "account";
 

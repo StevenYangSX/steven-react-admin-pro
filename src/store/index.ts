@@ -1,22 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit'
-import reducer from './reducer'
-import counterReducer  from './userInfoSlice'
-// ...
+import userInfoReducer  from './slices/userInfoSlice'
 
-// export const store = configureStore({
-//   reducer: {
-//     posts: postsReducer,
-//     comments: commentsReducer,
-//     users: usersReducer,
-//   },
-// })
 
 export const store = configureStore({
     reducer: {
-     testReducer:reducer,
-     userInfoReducer:counterReducer 
+     userInfoReducer 
     },
   })
+
+
 
   // Subscribe to store changes and save to localStorage
 store.subscribe(() => {
@@ -30,7 +22,6 @@ store.subscribe(() => {
  if(currentState.userInfoReducer.menuList) {
   localStorage.setItem("menuList",JSON.stringify(currentState.userInfoReducer.menuList))
  }
-
 });
 
 
