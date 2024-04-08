@@ -33,7 +33,6 @@ export const userInfoSlice = createSlice({
     systemMenuUpdate: (state, action: PayloadAction<any>) => {
       state.menuList= action.payload
     },
-
   },
 })
 
