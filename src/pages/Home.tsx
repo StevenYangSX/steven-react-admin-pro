@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { Breadcrumb, Layout, theme } from "antd";
 import { Outlet } from "react-router-dom";
 import MainMenu from "@/components/mainMenu/MainMenu";
-const { Header, Content, Footer, Sider } = Layout;
+import UserInfoDropDown from "@/components/userInfoDropDown/UserInfoDropDown";
 
+const { Header, Content, Footer, Sider } = Layout;
 const BasicLayout: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
 
@@ -23,14 +24,17 @@ const BasicLayout: React.FC = () => {
             padding: 0,
             background: colorBgContainer,
             display: "flex",
-            justifyContent: "center",
-            flexDirection: "column",
+            justifyContent: "space-between",
+            flexDirection: "row",
+            alignItems: "center",
           }}
         >
           <Breadcrumb style={{ margin: "0 0 0 16px" }}>
             <Breadcrumb.Item>User</Breadcrumb.Item>
             <Breadcrumb.Item>Bill</Breadcrumb.Item>
           </Breadcrumb>
+
+          <UserInfoDropDown />
         </Header>
         <Content style={{ margin: "16px 16px  0" }}>
           <div

@@ -1,4 +1,4 @@
-const getDataFromLocalStorageByName = (key: string) => {
+export const getDataFromLocalStorageByName = (key: string) => {
   let temp = localStorage.getItem(key);
   if (temp) {
     return JSON.parse(temp);
@@ -6,8 +6,15 @@ const getDataFromLocalStorageByName = (key: string) => {
   return null;
 };
 
-const setDataToLocalStorageWithName = (key: string, payload: object) => {
+export const setDataToLocalStorageWithName = (key: string, payload: object) => {
   return null;
 };
 
-export { getDataFromLocalStorageByName, setDataToLocalStorageWithName };
+
+export const deleteLocalStorageByName = (key:string) =>{
+  localStorage.removeItem(key);
+}
+
+export const deleteLocalStorageData = () =>{
+  localStorage.clear();
+}
