@@ -1,6 +1,6 @@
 import HttpRequest from "@/utils/httpRequest";
 
-export const serverHealthCheck = () => {
+export const serverHealthCheckApi = () => {
   return HttpRequest({
     url:"/health",
     method: "get",
