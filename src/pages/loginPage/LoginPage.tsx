@@ -9,48 +9,48 @@ import {
 } from "@ant-design/pro-components";
 import { Button, message, theme } from "antd";
 import { useState, useEffect } from "react";
-
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { userLogin, systemMenuUpdate } from "@/store/userInfoSlice";
-
+import { userLogin, systemMenuUpdate } from "@/store/slices/userInfoSlice";
+import { useAppSelector } from "@/hooks/reduxHooks";
 type LoginType = "phone" | "account";
 
 const Page = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const serverStatus = useAppSelector((state) => state.serverHealthReducer.serverRunning);
   const [loginType, setLoginType] = useState<LoginType>("account");
   const [messageApi, contextHolder] = message.useMessage();
   const { token } = theme.useToken();
   const [loggedIn, setLoggedIn] = useState(false);
-
+  const [loading, setLoading] = useState(false);
   const getSystemMenu = async () => {
     try {
       const response = await getSystemMenusApi();
-
-      //TODO 根据用户的menuList 和 系统全部的menuList 完成路由部分 设计！ （动态路由 路由表 权限控制）
       dispatch(systemMenuUpdate(response.data));
     } catch (error) {}
   };
   useEffect(() => {
     if (loggedIn) {
       getSystemMenu();
-      // navigate("/");
     }
   }, [loggedIn]);
+
   const onSubmit = (p1: any) => {
     let payload = { username: p1.username, password: p1.password };
-
     loginApi(payload)
       .then((res) => {
         dispatch(userLogin(res.data));
+        setLoading(false);
         setLoggedIn(true);
       })
       .catch((err) => {
         messageApi.open({
           type: "error",
           content: err.message,
+          duration: 5,
         });
+        setLoading(false);
       });
   };
 
@@ -63,7 +63,10 @@ const Page = () => {
     >
       {contextHolder}
       <LoginFormPage
+        loading={loading}
+        disabled={!serverStatus}
         onFinish={async (values) => {
+          setLoading(true);
           await onSubmit(values);
           return true;
         }}

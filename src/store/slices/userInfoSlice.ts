@@ -1,39 +1,16 @@
-import { SysterUserInfo } from '@/types/systemDataTypes'
+
+import { UserInfoState } from '@/types/systemStateTypes';
 import { createSlice } from '@reduxjs/toolkit'
+import { getDataFromLocalStorageByName } from '@/utils/localStorageManager';
 import type { PayloadAction } from '@reduxjs/toolkit'
-import { act } from 'react-dom/test-utils'
 
-export interface CounterState {
-  token:string | null
-  value: number,
-  userInfo: SysterUserInfo | null,
-  expiredTime:number | null,
-  menuList: Array<any> | null
-}
-const getUserInfoFromLocalStorage = () =>{
-  let temp = localStorage.getItem('userInfo');
-  if(temp) {
-    return JSON.parse(temp);
-  } else {
-    return null
-  }
-}
 
-const getMenuListFromLocalStorage = () =>{
-  let temp = localStorage.getItem('menuList');
-  if(temp) {
-    return JSON.parse(temp);
-  } else {
-    return null
-  }
-}
 
-const initialState: CounterState = {
-  value: 0,
+const initialState: UserInfoState = {
   token:localStorage.getItem('userToken') ??  null,
-  userInfo:  getUserInfoFromLocalStorage(),
+  userInfo:  getDataFromLocalStorageByName('userInfo'),
   expiredTime:null,
-  menuList: getMenuListFromLocalStorage(),
+  menuList:  getDataFromLocalStorageByName('menuList')
 }
 
 
@@ -56,11 +33,10 @@ export const userInfoSlice = createSlice({
     systemMenuUpdate: (state, action: PayloadAction<any>) => {
       state.menuList= action.payload
     },
-
   },
 })
 
 // Action creators are generated for each case reducer function
-export const {  userLogin ,systemMenuUpdate } = userInfoSlice.actions
+export const {  userLogin ,systemMenuUpdate,userLogout } = userInfoSlice.actions
 
 export default userInfoSlice.reducer

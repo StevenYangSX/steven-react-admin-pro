@@ -56,6 +56,9 @@ service.interceptors.response.use(
     }
   },
   (error) => {
+    if (error && !error.response) {
+      return Promise.reject(error);
+    }
     if (error && error.response) {
       switch (error.response.status) {
         case 400:
