@@ -1,7 +1,7 @@
 
 import { UserInfoState } from '@/types/systemStateTypes';
 import { createSlice } from '@reduxjs/toolkit'
-import { getDataFromLocalStorageByName } from '@/utils/localStorageManager';
+import { deleteLocalStorageData, getDataFromLocalStorageByName } from '@/utils/localStorageManager';
 import type { PayloadAction } from '@reduxjs/toolkit'
 
 
@@ -15,7 +15,7 @@ const initialState: UserInfoState = {
 
 
 export const userInfoSlice = createSlice({
-  name: 'counter',
+  name: 'user',
   initialState,
   reducers: {
     userLogin: (state ,action:PayloadAction<any>) =>{
@@ -24,10 +24,12 @@ export const userInfoSlice = createSlice({
       state.token = action.payload.token
       state.userInfo =  userInfoWithAccess
     },
-    userLogout:(state,action)=>{
-      state = initialState;
+    userLogout:(state)=>{
       state.token = null;
-      state.userInfo = null
+      state.userInfo = null,
+      state.expiredTime = null,
+      state.menuList = null,
+      deleteLocalStorageData();
     },
     
     systemMenuUpdate: (state, action: PayloadAction<any>) => {
