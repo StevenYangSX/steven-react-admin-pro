@@ -31,13 +31,15 @@ service.interceptors.request.use(
 // 响应拦截器
 service.interceptors.response.use(
   (response) => {
+    console.log("dfdfdf",response)
     const code = response.status;
     const ApiStatusCode = response.data.statusCode;
     switch (ApiStatusCode) {
       case 200:
         return response.data;
       // [ 示例 ] code === 0 代表没有错误
-
+      case 400:
+        return Promise.reject(response.data || { msg: "未知错误" });
       case 40000:
       case 400001:
       case 400011:
@@ -56,13 +58,14 @@ service.interceptors.response.use(
     }
   },
   (error) => {
+    console.log("eeeee",error)
     if (error && !error.response) {
       return Promise.reject(error);
     }
     if (error && error.response) {
       switch (error.response.status) {
         case 400:
-          error.message = "请求错误";
+          return Promise.reject(error.response.data);
           break;
         case 40000:
           error.message = "未授权，请登录";

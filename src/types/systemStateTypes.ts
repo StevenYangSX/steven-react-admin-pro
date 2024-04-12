@@ -1,11 +1,11 @@
 import { SysterUserInfo } from '@/types/systemDataTypes'
-
+import { SystemMenuItem } from '@/types/systemDataTypes'
 // userinfo state type
 export interface UserInfoState {
     token:string | null
     userInfo: SysterUserInfo | null,
     expiredTime:number | null,
-    menuList: Array<any> | null
+    menuList: Array<SystemMenuItem> | null
   }
   
 

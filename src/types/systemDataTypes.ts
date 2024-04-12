@@ -1,4 +1,5 @@
 export interface SystemMenuItem {
+    menuId?:number,
     key?:string,
     icon?: string;
     children: Array<SystemMenuItem> | null;

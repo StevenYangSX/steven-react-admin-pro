@@ -12,7 +12,7 @@ const initialState: UserInfoState = {
   expiredTime:null,
   menuList:  getDataFromLocalStorageByName('menuList')
 }
-
+6
 
 export const userInfoSlice = createSlice({
   name: 'user',

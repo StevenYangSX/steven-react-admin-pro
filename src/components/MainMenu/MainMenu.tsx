@@ -107,6 +107,7 @@ const MainMenu: React.FC = () => {
         onClick={menuItemClick}
         onOpenChange={handleMenuOpenChange}
         openKeys={openKeys}
+        selectable={false}
       />
     </div>
   );

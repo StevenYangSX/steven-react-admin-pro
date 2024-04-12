@@ -14,7 +14,12 @@ const BasicLayout: React.FC = () => {
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
+      <Sider
+        collapsible
+        collapsed={collapsed}
+        onCollapse={(value) => setCollapsed(value)}
+        width="230px"
+      >
         <div className="demo-logo-vertical" />
         <MainMenu />
       </Sider>
