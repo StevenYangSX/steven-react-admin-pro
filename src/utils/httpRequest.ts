@@ -6,6 +6,8 @@ axios.defaults.validateStatus = customValidateStatus;
 import Setting from "@/setting";
 import customValidateStatus from "./customValidateStatus";
 import { store } from "@/store";
+import { useNavigate } from 'react-router-dom';
+
 // 创建一个 axios 实例
 const service = axios.create({
   // baseURL: Setting.apiBaseURL,
@@ -17,10 +19,10 @@ const service = axios.create({
 // 请求拦截器
 service.interceptors.request.use(
   async (config) => {
-    let currentUserInfo = store.getState().userInfoReducer.userInfo
-    if(currentUserInfo) {
-        config.headers['Authorization'] = 'Bearer ' + store.getState().userInfoReducer.token
-    }
+    // let currentUserInfo = await store.getState().userInfoReducer.userInfo
+    // if(currentUserInfo) {
+    //     config.headers['Authorization'] = 'Bearer ' + store.getState().userInfoReducer.token
+    // }
     return config;
   },
   (error) => {
@@ -31,7 +33,6 @@ service.interceptors.request.use(
 // 响应拦截器
 service.interceptors.response.use(
   (response) => {
-    console.log("dfdfdf",response)
     const code = response.status;
     const ApiStatusCode = response.data.statusCode;
     switch (ApiStatusCode) {
@@ -58,15 +59,18 @@ service.interceptors.response.use(
     }
   },
   (error) => {
-    console.log("eeeee",error)
+    // const navigate = useNavigate();
     if (error && !error.response) {
       return Promise.reject(error);
     }
     if (error && error.response) {
       switch (error.response.status) {
         case 400:
-          return Promise.reject(error.response.data);
+          return Promise.reject("error.response.data");
           break;
+        case 401:
+          
+          return Promise.reject("Authentication Failed. Please Login")
         case 40000:
           error.message = "未授权，请登录";
           break;

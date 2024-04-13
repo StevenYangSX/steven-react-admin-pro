@@ -12,3 +12,7 @@ export interface AddSystemMenuItemRequestType {
     uniqAuth: string;
     menuType: 0 | 1
   }
+
+  export interface deleteMenuByIdType{
+    menuId:number
+  }

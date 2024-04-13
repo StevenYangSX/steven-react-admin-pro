@@ -1,4 +1,4 @@
-import { AddSystemMenuItemRequestType } from "@/types/requestDataTypes";
+import { AddSystemMenuItemRequestType, deleteMenuByIdType } from "@/types/requestDataTypes";
 import HttpRequest from "@/utils/httpRequest";
 
 export const getSystemMenusApi = () => {
@@ -13,5 +13,14 @@ export const addMenuItemApi = (menuItem:AddSystemMenuItemRequestType) =>{
     url:"/systemMenu/addMenu",
     method:"post",
     data:menuItem
+  })
+}
+
+
+export const deleteMenuByIdApi = (payload:deleteMenuByIdType) => {
+  return HttpRequest({
+    url:"/systemMenu/deleteMenu",
+    method:"post",
+    data:payload
   })
 }

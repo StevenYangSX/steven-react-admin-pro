@@ -91,17 +91,24 @@ const MainMenu: React.FC = () => {
   };
 
   useEffect(() => {
+    console.log("system....listlkkkklllllll", systemMenuList);
     if (systemMenuList) {
+      //   TODO : userAccessFilter has problem! When menu added, user access will not updated!
       setMenuItems(userAccessFilter(menuListItemConverter(systemMenuList)));
     }
   }, [systemMenuList]);
 
+  useEffect(() => {
+    let pathPrefix = currentPath.pathname.split("/");
+    setOpenKeys(["/" + pathPrefix[1]]);
+  }, [currentPath.pathname]);
   return (
     <div>
       <Menu
         style={{ userSelect: "none" }}
         theme="dark"
         defaultSelectedKeys={[currentPath.pathname]}
+        selectedKeys={[currentPath.pathname]}
         mode="inline"
         items={menuItems}
         onClick={menuItemClick}

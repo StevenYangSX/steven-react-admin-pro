@@ -14,15 +14,35 @@ import {
   InputNumber,
   message,
   Radio,
+  Spin,
 } from "antd";
 import type { TableProps, FormInstance, RadioChangeEvent } from "antd";
-import { useAppSelector } from "@/hooks/reduxHooks";
+import { useAppSelector, useAppDispatch } from "@/hooks/reduxHooks";
 import { SystemMenuItem } from "@/types/systemDataTypes";
-import { addMenuItemApi } from "@/api/systemMenu";
+import { addMenuItemApi, deleteMenuByIdApi } from "@/api/systemMenu";
 import { AddSystemMenuItemRequestType } from "@/types/requestDataTypes";
+import { fetchSystemMenuList } from "@/store/slices/userInfoSlice";
+
 const MenuManagement = () => {
   const [messageApi, messageContextHolder] = message.useMessage();
-
+  const [pageLoading, setPageLoading] = useState(false);
+  const dispatch = useAppDispatch();
+  const deleteMenuById = async (menuId: number | undefined) => {
+    if (!pageLoading) {
+      if (menuId) {
+        setPageLoading(true);
+        try {
+          const response = await deleteMenuByIdApi({ menuId });
+          messageApi.success(response.message);
+        } catch (error: any) {
+          messageApi.error(error.message);
+        } finally {
+          setPageLoading(false);
+          dispatch(fetchSystemMenuList());
+        }
+      }
+    }
+  };
   const columns: TableProps<SystemMenuItem>["columns"] = [
     {
       title: "ID",
@@ -68,68 +88,11 @@ const MenuManagement = () => {
 
           <a>Modify</a>
           <Divider type="vertical" />
-          <a>Delete</a>
+          <a onClick={() => deleteMenuById(record.menuId)}>Delete</a>
         </Space>
       ),
     },
   ];
-
-  let data = undefined;
-
-  const menuData = useAppSelector((state) => state.userInfoReducer.menuList);
-  const options = menuData?.map((item) => ({
-    value: item.menuId, // Map the name property to value
-    label: item.menuName, // Map the name property to label
-  }));
-
-  console.log("check optionssss", options);
-
-  if (menuData) {
-    data = menuData;
-  }
-
-  const [open, setOpen] = useState(false);
-  const [confirmLoading, setConfirmLoading] = useState(false);
-
-  const showAddMenuModal = () => {
-    setOpen(true);
-  };
-
-  const handleOk = async (values: AddSystemMenuItemRequestType) => {
-    setConfirmLoading(true);
-    console.log(values);
-    try {
-      const response = await addMenuItemApi(values);
-
-      messageApi.success(response.data);
-    } catch (error: any) {
-      console.log("check respohnse.error..", error);
-      messageApi.error(error.message);
-    } finally {
-      setOpen(false);
-      setConfirmLoading(false);
-    }
-
-    // if(response) {
-    //   setOpen(false);
-    //   setConfirmLoading(false);
-    //   messageApi.success(response.data.message)
-    //   return;
-    // }
-
-    // setTimeout(() => {
-
-    // }, 2000);
-  };
-
-  const handleCancel = () => {
-    console.log("Clicked cancel button");
-    setOpen(false);
-  };
-
-  interface SubmitButtonProps {
-    form: FormInstance;
-  }
 
   const SubmitButton: React.FC<React.PropsWithChildren<SubmitButtonProps>> = ({
     form,
@@ -147,16 +110,12 @@ const MenuManagement = () => {
         .catch(() => setSubmittable(false));
     }, [form, values]);
 
-    const testttt = () => {
-      handleOk(values);
-    };
-
     return (
       <Button
         type="primary"
         htmlType="submit"
         disabled={!submittable}
-        onClick={testttt}
+        onClick={() => handleOk(values)}
         loading={confirmLoading}
       >
         {children}
@@ -164,17 +123,68 @@ const MenuManagement = () => {
     );
   };
 
+  let data = undefined;
+  const menuData = useAppSelector((state) => state.userInfoReducer.menuList);
+  const options = menuData?.map((item) => ({
+    value: item.menuId, // Map the name property to value
+    label: item.menuName, // Map the name property to label
+  }));
+
+  if (menuData) {
+    data = menuData;
+  }
+
+  const [open, setOpen] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+
+  const showAddMenuModal = () => {
+    setOpen(true);
+  };
+
+  const handleOk = async (values: AddSystemMenuItemRequestType) => {
+    //Need to access state to get radio group value
+    if (menuTypeRadiovValue === 0 || menuTypeRadiovValue === 1) {
+      values.menuType = menuTypeRadiovValue;
+      console.log("valeus......", values);
+      setConfirmLoading(true);
+      try {
+        const response = await addMenuItemApi(values);
+        messageApi.success(response.data);
+      } catch (error: any) {
+        messageApi.error(error.message);
+      } finally {
+        setOpen(false);
+        setConfirmLoading(false);
+        dispatch(fetchSystemMenuList());
+      }
+    } else {
+      messageApi.warning("Menu Type Value is Invalid!");
+    }
+  };
+
+  const handleCancel = () => {
+    setOpen(false);
+  };
+
+  interface SubmitButtonProps {
+    form: FormInstance;
+  }
+
   const [menuTypeRadiovValue, setMenuTypeRadiovValue] = useState(0);
 
   const onRadioChange = (e: RadioChangeEvent) => {
-    console.log("radio checked", e.target.value);
     setMenuTypeRadiovValue(e.target.value);
   };
 
   const [form] = Form.useForm();
 
+  useEffect(() => {
+    console.log("check readiaoidad", menuTypeRadiovValue);
+  }, [menuTypeRadiovValue]);
+
   return (
     <div>
+      <Spin spinning={pageLoading} />
       {messageContextHolder}
       <Modal
         title="Add Level One Menu Item"
@@ -252,7 +262,7 @@ const MenuManagement = () => {
 
           <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
             <Col span={12}>
-              <Form.Item name="menuType" label="Item Type" rules={[{ required: true }]}>
+              <Form.Item name="menuType" label="Item Type">
                 <Radio.Group onChange={onRadioChange} value={menuTypeRadiovValue} defaultValue={0}>
                   <Radio value={0}>Menu</Radio>
                   <Radio value={1}>API</Radio>
