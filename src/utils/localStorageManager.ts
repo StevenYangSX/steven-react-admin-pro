@@ -12,6 +12,7 @@ export const setDataToLocalStorageWithName = (key: string, payload: object) => {
 
 
 export const deleteLocalStorageByName = (key:string) =>{
+  console.log("found delete staorage")
   localStorage.removeItem(key);
 }
 

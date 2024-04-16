@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Menu } from "antd";
-import Icon from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { useNavigate, useLocation } from "react-router-dom";
 import { RootState } from "@/store";
 import MenuItem from "antd/es/menu/MenuItem";
-import { SystemMenuItem, SysterUserInfo } from "@/types/systemDataTypes";
+import { SystemMenuItem } from "@/types/systemDataTypes";
 import DynamicIcon from "../dynamicIcon/DynamicIcon";
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -91,12 +90,12 @@ const MainMenu: React.FC = () => {
   };
 
   useEffect(() => {
-    console.log("system....listlkkkklllllll", systemMenuList);
     if (systemMenuList) {
       //   TODO : userAccessFilter has problem! When menu added, user access will not updated!
+      console.log("systemMunuList updated.....", systemMenuList);
       setMenuItems(userAccessFilter(menuListItemConverter(systemMenuList)));
     }
-  }, [systemMenuList]);
+  }, [systemMenuList, userInfo]);
 
   useEffect(() => {
     let pathPrefix = currentPath.pathname.split("/");

@@ -21,11 +21,16 @@ import { useAppSelector, useAppDispatch } from "@/hooks/reduxHooks";
 import { SystemMenuItem } from "@/types/systemDataTypes";
 import { addMenuItemApi, deleteMenuByIdApi } from "@/api/systemMenu";
 import { AddSystemMenuItemRequestType } from "@/types/requestDataTypes";
-import { fetchSystemMenuList } from "@/store/slices/userInfoSlice";
+import { fetchSystemMenuList, fetchUserAccessList } from "@/store/slices/userInfoSlice";
+import IconSelectionModal from "@/components/iconSelectionModal/IconSelectionModal";
+import { SearchProps } from "antd/es/input/Search";
 
 const MenuManagement = () => {
+  const { Search } = Input;
+
   const [messageApi, messageContextHolder] = message.useMessage();
   const [pageLoading, setPageLoading] = useState(false);
+
   const dispatch = useAppDispatch();
   const deleteMenuById = async (menuId: number | undefined) => {
     if (!pageLoading) {
@@ -79,16 +84,17 @@ const MenuManagement = () => {
         <Space size="middle">
           {record.parentId === 0 ? (
             <div>
-              <a>Add Submenu</a>
-              <Divider type="vertical" />
+              <Button type="primary">Add Submenu</Button>
             </div>
           ) : (
             <></>
           )}
 
-          <a>Modify</a>
-          <Divider type="vertical" />
-          <a onClick={() => deleteMenuById(record.menuId)}>Delete</a>
+          <Button>Modify</Button>
+
+          <Button onClick={() => deleteMenuById(record.menuId)} danger>
+            Delete
+          </Button>
         </Space>
       ),
     },
@@ -123,19 +129,32 @@ const MenuManagement = () => {
     );
   };
 
-  let data = undefined;
+  const [open, setOpen] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
   const menuData = useAppSelector((state) => state.userInfoReducer.menuList);
+  const userStateError = useAppSelector((state) => state.userInfoReducer.error);
+  const iconName = useAppSelector((state) => state.iconSelectioReducer.iconName);
+  // for not showing the type error
+  let data = undefined;
+  if (menuData) {
+    data = menuData;
+  }
   const options = menuData?.map((item) => ({
     value: item.menuId, // Map the name property to value
     label: item.menuName, // Map the name property to label
   }));
+  options?.unshift({ value: 0, label: "First Level Menu" });
 
-  if (menuData) {
-    data = menuData;
-  }
+  useEffect(() => {
+    dispatch(fetchSystemMenuList());
+    if (userStateError) {
+      messageApi.error(userStateError.message);
+    }
+  }, []);
 
-  const [open, setOpen] = useState(false);
-  const [confirmLoading, setConfirmLoading] = useState(false);
+  // useEffect(() => {
+  //   if (httpStatus === HttpStatus.Idle) dispatch(fetchSystemMenuList());
+  // }, []);
 
   const showAddMenuModal = () => {
     setOpen(true);
@@ -145,7 +164,6 @@ const MenuManagement = () => {
     //Need to access state to get radio group value
     if (menuTypeRadiovValue === 0 || menuTypeRadiovValue === 1) {
       values.menuType = menuTypeRadiovValue;
-      console.log("valeus......", values);
       setConfirmLoading(true);
       try {
         const response = await addMenuItemApi(values);
@@ -156,6 +174,7 @@ const MenuManagement = () => {
         setOpen(false);
         setConfirmLoading(false);
         dispatch(fetchSystemMenuList());
+        dispatch(fetchUserAccessList(0));
       }
     } else {
       messageApi.warning("Menu Type Value is Invalid!");
@@ -178,14 +197,31 @@ const MenuManagement = () => {
 
   const [form] = Form.useForm();
 
-  useEffect(() => {
-    console.log("check readiaoidad", menuTypeRadiovValue);
-  }, [menuTypeRadiovValue]);
+  const onSearch: SearchProps["onSearch"] = (value, _e, info) => {
+    console.log(info?.source, value);
+    if (info?.source !== "clear") {
+      setIconModalShow(true);
+    }
+  };
+
+  const [iconModalShow, setIconModalShow] = useState(false);
+
+  // Define the type for the callback function prop
+  type OnChildDataChange = (data: boolean) => void;
+
+  // Define the callback function to handle data from the child component
+  const handleModalShowChange: OnChildDataChange = (data) => {
+    setIconModalShow(data);
+    console.log("iconName...", iconName);
+    console.log("for...mmm", form);
+    form.setFieldValue("icon", iconName);
+  };
 
   return (
     <div>
-      <Spin spinning={pageLoading} />
+      <Spin spinning={pageLoading} fullscreen={true} />
       {messageContextHolder}
+      <IconSelectionModal onModalShowChange={handleModalShowChange} iconModalShow={iconModalShow} />
       <Modal
         title="Add Level One Menu Item"
         open={open}
@@ -243,8 +279,12 @@ const MenuManagement = () => {
 
           <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
             <Col span={12}>
-              <Form.Item name="icon" label="Menu Icon" rules={[{ required: true }]}>
-                <Input placeholder="Displaying icon of the menu item" />
+              <Form.Item name="icon" label="Menu Icon">
+                <Search
+                  placeholder="Displaying icon of the menu item"
+                  allowClear
+                  onSearch={onSearch}
+                />
               </Form.Item>
             </Col>
             <Col span={12}>
@@ -272,7 +312,9 @@ const MenuManagement = () => {
           </Row>
         </Form>
       </Modal>
-      <Button onClick={showAddMenuModal}>Add Level-One Menu</Button>
+      <Button onClick={showAddMenuModal} type="primary">
+        Add Menu Item
+      </Button>
       <Divider></Divider>
       <Table columns={columns} dataSource={data} />
     </div>

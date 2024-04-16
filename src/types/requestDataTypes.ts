@@ -16,3 +16,7 @@ export interface AddSystemMenuItemRequestType {
   export interface deleteMenuByIdType{
     menuId:number
   }
+
+  export interface getUserAccessListRequestType {
+    userId:number | undefined
+  }
