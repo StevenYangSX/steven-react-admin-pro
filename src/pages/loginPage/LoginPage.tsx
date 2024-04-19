@@ -10,16 +10,14 @@ import {
 import { Button, message, theme } from "antd";
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { userLogin, systemMenuUpdate } from "@/store/slices/userInfoSlice";
 import { useAppSelector } from "@/hooks/reduxHooks";
 type LoginType = "phone" | "account";
 
 const Page = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const serverStatus = useAppSelector((state) => state.serverHealthReducer.serverRunning);
-  const [loginType, setLoginType] = useState<LoginType>("account");
+  const [loginType] = useState<LoginType>("account");
   const [messageApi, contextHolder] = message.useMessage();
   const { token } = theme.useToken();
   const [loggedIn, setLoggedIn] = useState(false);

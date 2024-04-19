@@ -1,4 +1,5 @@
-import HttpRequest from "@/utils/httpRequest";
+import { LoginRequestType } from "@/types/requestDataTypes";
+import HttpRequest from "./httpRequestExtention/httpRequest";
 
 export const loginApi = (data:LoginRequestType) => {
   return HttpRequest({

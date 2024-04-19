@@ -10,9 +10,11 @@ export default function useAuthentication() {
   const userToken = useSelector((state:RootState) => state.userInfoReducer.token)
   const userInfo = useSelector((state:RootState) =>state.userInfoReducer.userInfo )
   useEffect(() => {
+   
     if(userToken && userInfo) {
       setAuthenticated(true);
     } else {
+    
       setAuthenticated(false)   
     }
     setLoading(false);

@@ -1,11 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
 import userInfoReducer  from './slices/userInfoSlice'
 import serverHealthReducer from '@/store/slices/serverHealthSlice';
-
+import iconSelectioReducer from './slices/iconSelectionSlice';
 export const store = configureStore({
     reducer: {
      userInfoReducer,
-     serverHealthReducer
+     serverHealthReducer,
+     iconSelectioReducer
     },
   })
 

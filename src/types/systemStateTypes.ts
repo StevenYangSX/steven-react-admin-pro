@@ -1,11 +1,18 @@
 import { SysterUserInfo } from '@/types/systemDataTypes'
-
+import { SystemMenuItem } from '@/types/systemDataTypes'
 // userinfo state type
 export interface UserInfoState {
     token:string | null
     userInfo: SysterUserInfo | null,
     expiredTime:number | null,
-    menuList: Array<any> | null
+    menuList: Array<SystemMenuItem> | null,
+    httpStatus : HttpStatus,
+    error:null | HttpResponseError
+  }
+
+  export interface HttpResponseError {
+    message?:string
+    status?:number
   }
   
 
@@ -28,4 +35,10 @@ export interface ServerHealthState {
   error: HttpErrorObject  | null
 }
 
+
+
+
+export interface IconSelectionState {
+  iconName:String
+}
 

@@ -14,7 +14,12 @@ const BasicLayout: React.FC = () => {
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
+      <Sider
+        collapsible
+        collapsed={collapsed}
+        onCollapse={(value) => setCollapsed(value)}
+        width="230px"
+      >
         <div className="demo-logo-vertical" />
         <MainMenu />
       </Sider>
@@ -49,9 +54,9 @@ const BasicLayout: React.FC = () => {
             <Outlet />
           </div>
         </Content>
-        <Footer style={{ textAlign: "center", padding: 0, lineHeight: "48px" }}>
-          Ant Design ©{new Date().getFullYear()} Created by Ant UED
-        </Footer>
+        {/* <Footer style={{ textAlign: "center", padding: 0, lineHeight: "48px" }}>
+          Created by Steven Yang
+        </Footer> */}
       </Layout>
     </Layout>
   );

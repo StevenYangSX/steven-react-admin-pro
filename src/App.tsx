@@ -1,12 +1,12 @@
 import { useRoutes, useLocation, useNavigate } from "react-router-dom";
 import routes from "@/router/routes";
 import { useEffect } from "react";
-import { Alert, Spin, message } from "antd";
+import { Spin, message } from "antd";
 import useAuthentication from "./hooks/useAuthentication";
 import { fetchServerStatus } from "./store/slices/serverHealthSlice";
 import { useAppDispatch, useAppSelector } from "./hooks/reduxHooks";
 import { HttpStatus } from "./types/systemStateTypes";
-
+import setupAxiosInterceptors from "./utils/axiosInterceptorSetup";
 const BeforeRouterEnter = () => {
   const currentPath = useLocation();
   const outlet = useRoutes(routes);
@@ -33,6 +33,15 @@ function App() {
   const serverStatusCheckProcess = useAppSelector((state) => state.serverHealthReducer.httpStatus);
   const serverError = useAppSelector((state) => state.serverHealthReducer.error);
   const [messageApi, contextHolder] = message.useMessage();
+
+  /*
+   When configuring axios request interceptor, it needs to access store data. However, 
+   this causes a "early access" before store initializaion problem. 
+   So this configuration is moved to here, which ensures the store has been setup properly.
+  */
+  useEffect(() => {
+    setupAxiosInterceptors();
+  }, []);
   useEffect(() => {
     if (serverStatusCheckProcess === HttpStatus.Idle) {
       dispatch(fetchServerStatus());

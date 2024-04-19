@@ -4,11 +4,14 @@ import { Dropdown, Space, Modal } from "antd";
 import { useAppDispatch } from "@/hooks/reduxHooks";
 import { userLogout } from "@/store/slices/userInfoSlice";
 
+import { useSelector } from "react-redux";
+import { selectUserName } from "@/store/slices/userInfoSlice"; // Import the selector
+
 const UserInfoDropDown: React.FC = () => {
   const dispatch = useAppDispatch();
   const [modal, contextHolder] = Modal.useModal();
-
   const ReachableContext = createContext<string | null>(null);
+  const userName = useSelector(selectUserName);
   const logoutConfirmation = "Are you sure to logout ?";
   const logoutModalConfig = {
     title: "User Logout",
@@ -55,7 +58,7 @@ const UserInfoDropDown: React.FC = () => {
         <Dropdown menu={{ items }}>
           <a onClick={(e) => e.preventDefault()}>
             <Space>
-              User-Name
+              {userName}
               {/* <DownOutlined /> */}
             </Space>
           </a>

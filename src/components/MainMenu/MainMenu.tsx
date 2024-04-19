@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Menu } from "antd";
-import Icon from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { useNavigate, useLocation } from "react-router-dom";
 import { RootState } from "@/store";
 import MenuItem from "antd/es/menu/MenuItem";
-import { SystemMenuItem, SysterUserInfo } from "@/types/systemDataTypes";
+import { SystemMenuItem } from "@/types/systemDataTypes";
 import DynamicIcon from "../dynamicIcon/DynamicIcon";
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -94,19 +93,25 @@ const MainMenu: React.FC = () => {
     if (systemMenuList) {
       setMenuItems(userAccessFilter(menuListItemConverter(systemMenuList)));
     }
-  }, [systemMenuList]);
+  }, [systemMenuList, userInfo]);
 
+  useEffect(() => {
+    let pathPrefix = currentPath.pathname.split("/");
+    setOpenKeys(["/" + pathPrefix[1]]);
+  }, [currentPath.pathname]);
   return (
     <div>
       <Menu
         style={{ userSelect: "none" }}
         theme="dark"
         defaultSelectedKeys={[currentPath.pathname]}
+        selectedKeys={[currentPath.pathname]}
         mode="inline"
         items={menuItems}
         onClick={menuItemClick}
         onOpenChange={handleMenuOpenChange}
         openKeys={openKeys}
+        selectable={false}
       />
     </div>
   );
