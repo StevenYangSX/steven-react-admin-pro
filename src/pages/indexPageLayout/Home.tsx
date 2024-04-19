@@ -54,9 +54,9 @@ const BasicLayout: React.FC = () => {
             <Outlet />
           </div>
         </Content>
-        <Footer style={{ textAlign: "center", padding: 0, lineHeight: "48px" }}>
-          Ant Design ©{new Date().getFullYear()} Created by Ant UED
-        </Footer>
+        {/* <Footer style={{ textAlign: "center", padding: 0, lineHeight: "48px" }}>
+          Created by Steven Yang
+        </Footer> */}
       </Layout>
     </Layout>
   );

@@ -60,18 +60,22 @@ const MenuManagement = () => {
       dataIndex: "menuId",
       key: "menuId",
       render: (text) => <a>{text}</a>,
+      align: "center",
     },
     {
       title: "Menu Name",
       dataIndex: "menuName",
       key: "menuName",
+      align: "center",
     },
     {
       title: "Path",
       dataIndex: "path",
       key: "path",
+      align: "center",
     },
     {
+      align: "center",
       title: "Authentication Tag",
       key: "uniqAuth",
       dataIndex: "uniqAuth",
@@ -84,6 +88,7 @@ const MenuManagement = () => {
       ),
     },
     {
+      align: "center",
       title: "Action",
       key: "action",
       render: (_, record) => (
@@ -402,7 +407,7 @@ const MenuManagement = () => {
         Add Menu Item
       </Button>
       <Divider></Divider>
-      <Table columns={columns} dataSource={data} />
+      <Table columns={columns} dataSource={data} bordered={true} />
     </div>
   );
 };
