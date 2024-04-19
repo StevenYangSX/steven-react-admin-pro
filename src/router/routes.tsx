@@ -4,9 +4,6 @@ import { Navigate } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import NotFoundPage from "@/pages/notFoundPage/NotFoundPage";
 import LoginPage from "@/pages/loginPage/LoginPage";
-
-import Page3Sub1 from "@/pages/Page3Sub1";
-import Page3Sub2 from "@/pages/Page3Sub2";
 import Page3Sub3 from "@/pages/Page3Sub3";
 
 const DashBoard = lazy(() => import("@/pages/dashBoard/DashBoard"));

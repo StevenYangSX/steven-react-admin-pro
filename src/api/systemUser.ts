@@ -1,5 +1,5 @@
 import { getUserAccessListRequestType } from "@/types/requestDataTypes";
-import HttpRequest from "@/utils/httpRequest";
+import HttpRequest from "./httpRequestExtention/httpRequest";
 
 export const getUserAuthorizationApi = (payload:getUserAccessListRequestType) => {
     return HttpRequest({
@@ -8,3 +8,4 @@ export const getUserAuthorizationApi = (payload:getUserAccessListRequestType) =>
       data:payload
     })
   }
+

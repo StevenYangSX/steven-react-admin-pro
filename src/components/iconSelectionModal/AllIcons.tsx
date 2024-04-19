@@ -25,14 +25,6 @@ const Card = styled.div`
   text-align: center;
 `;
 
-const NameDescription = styled.p`
-  display: block;
-  text-align: center;
-  transform: scale(0.8);
-  font-family: "Lucida Console", Consolas;
-  white-space: nowrap;
-`;
-
 const allIcons: {
   [key: string]: any;
 } = AntdIcons;
@@ -71,7 +63,6 @@ const AllIcons: React.FC<IconSelectionModalProps> = ({ onModalShowChange }) => {
         <select name="theme-select" value={currentTheme} onChange={handleSelectChange}>
           <option value="Filled">Filled</option>
           <option value="Outlined">Outlined</option>
-          {/* <option value="TwoTone">Two-Tone</option> */}
         </select>
 
         <Input
@@ -90,8 +81,6 @@ const AllIcons: React.FC<IconSelectionModalProps> = ({ onModalShowChange }) => {
                 <Tooltip title={iconName}>
                   <Component style={{ fontSize: "24px" }} onClick={() => onIconClicked(iconName)} />
                 </Tooltip>
-
-                {/* <NameDescription>{iconName}</NameDescription> */}
               </Card>
             );
           }

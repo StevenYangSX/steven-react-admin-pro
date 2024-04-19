@@ -1,5 +1,5 @@
-import { AddSystemMenuItemRequestType, deleteMenuByIdType } from "@/types/requestDataTypes";
-import HttpRequest from "@/utils/httpRequest";
+import { AddOrModifySystemMenuItemRequestType, deleteMenuByIdType } from "@/types/requestDataTypes";
+import HttpRequest from "./httpRequestExtention/httpRequest";
 
 export const getSystemMenusApi = () => {
   return HttpRequest({
@@ -8,7 +8,7 @@ export const getSystemMenusApi = () => {
   });
 };
 
-export const addMenuItemApi = (menuItem:AddSystemMenuItemRequestType) =>{
+export const addMenuItemApi = (menuItem:AddOrModifySystemMenuItemRequestType) =>{
   return HttpRequest({
     url:"/systemMenu/addMenu",
     method:"post",
@@ -24,3 +24,13 @@ export const deleteMenuByIdApi = (payload:deleteMenuByIdType) => {
     data:payload
   })
 }
+
+
+export const modifyMenuItemApi = (payload:AddOrModifySystemMenuItemRequestType) => {
+  return HttpRequest({
+    url:"/systemMenu/modifyMenu",
+    method:"post",
+    data:payload
+  })
+}
+

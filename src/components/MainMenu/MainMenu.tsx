@@ -91,8 +91,6 @@ const MainMenu: React.FC = () => {
 
   useEffect(() => {
     if (systemMenuList) {
-      //   TODO : userAccessFilter has problem! When menu added, user access will not updated!
-      console.log("systemMunuList updated.....", systemMenuList);
       setMenuItems(userAccessFilter(menuListItemConverter(systemMenuList)));
     }
   }, [systemMenuList, userInfo]);

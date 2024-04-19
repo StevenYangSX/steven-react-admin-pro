@@ -1,4 +1,4 @@
-import service from "@/utils/httpRequest";
+import service from "@/utils/axiosInstance";
 import { store } from "@/store";
 import { catchAuthorizationError } from "@/store/slices/userInfoSlice";
 
@@ -23,7 +23,6 @@ import { catchAuthorizationError } from "@/store/slices/userInfoSlice";
 
     service.interceptors.response.use(
         (response) => {
-            const code = response.status;
             const ApiStatusCode = response.data.statusCode;
             switch (ApiStatusCode) {
               case 200:
@@ -44,6 +43,8 @@ import { catchAuthorizationError } from "@/store/slices/userInfoSlice";
               case 410001:
               case 410002:
               case 410003:
+              case 51000:
+                return Promise.reject(response.data || {message:"Unknown Error!"})
               default:
                 break;
             }

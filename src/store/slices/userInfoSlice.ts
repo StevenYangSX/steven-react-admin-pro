@@ -17,15 +17,6 @@ const initialState: UserInfoState = {
   error:null
 }
 
-const allEmptyState: UserInfoState = {
-  token:null,
-  userInfo: null,
-  expiredTime:null,
-  menuList:null,
-  httpStatus:HttpStatus.Idle,
-  error:null
-}
-
 
 export const fetchSystemMenuList = createAsyncThunk('user/getSystemMenu', async () => {
   const response = await getSystemMenusApi();
@@ -33,11 +24,10 @@ export const fetchSystemMenuList = createAsyncThunk('user/getSystemMenu', async 
 })
 
 
-export const fetchUserAccessList = createAsyncThunk<string[],any,{state:RootState}>('user/getUserAccessList',async (payload:any, thunkAPI) =>{
-  console.log("check payload in ",payload)
+export const fetchUserAccessList = createAsyncThunk<string[],any,{state:RootState}>('user/getUserAccessList',async (_payload:any, thunkAPI) =>{
   const state:RootState = thunkAPI.getState();
   const requestBody:getUserAccessListRequestType = {userId:state.userInfoReducer.userInfo?.userId}
-  const response = await getUserAuthorizationApi(requestBody) 
+  const response = await getUserAuthorizationApi(requestBody)
   return response.data;
 })
 
@@ -93,7 +83,6 @@ export const userInfoSlice = createSlice({
         // console.log("check action...",action);
     })
     .addCase(fetchUserAccessList.fulfilled, (state,action) =>{
-      console.log("get respoinse...",action);
       if(state.userInfo) {
         state.userInfo.access = action.payload;
       } 
@@ -111,5 +100,18 @@ export const {  userLogin ,systemMenuUpdate,userLogout,catchAuthorizationError }
 // Define a selector to access the menuList state property
 export const selectUserName = (state: RootState): string | undefined => state.userInfoReducer.userInfo?.username;
 
+// find a menuItem by menuId
+export const selectMenuById = (state:RootState,payload:number) =>{
+   const flatMenuList = [];
+   if(state.userInfoReducer.menuList) {
+    for(const menuItem of state.userInfoReducer.menuList) {
+      flatMenuList.push(menuItem);
+      if(menuItem.children && menuItem.children.length) {
+        flatMenuList.push(...menuItem.children)
+      }
+    }
+   }
+   return flatMenuList.find(ele => ele.menuId === payload)
+  }
 
 export default userInfoSlice.reducer

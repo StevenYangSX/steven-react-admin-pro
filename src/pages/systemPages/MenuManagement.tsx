@@ -19,18 +19,24 @@ import {
 import type { TableProps, FormInstance, RadioChangeEvent } from "antd";
 import { useAppSelector, useAppDispatch } from "@/hooks/reduxHooks";
 import { SystemMenuItem } from "@/types/systemDataTypes";
-import { addMenuItemApi, deleteMenuByIdApi } from "@/api/systemMenu";
-import { AddSystemMenuItemRequestType } from "@/types/requestDataTypes";
-import { fetchSystemMenuList, fetchUserAccessList } from "@/store/slices/userInfoSlice";
+import { addMenuItemApi, deleteMenuByIdApi, modifyMenuItemApi } from "@/api/systemMenu";
+import { AddOrModifySystemMenuItemRequestType } from "@/types/requestDataTypes";
+import {
+  fetchSystemMenuList,
+  fetchUserAccessList,
+  selectMenuById,
+} from "@/store/slices/userInfoSlice";
 import IconSelectionModal from "@/components/iconSelectionModal/IconSelectionModal";
 import { SearchProps } from "antd/es/input/Search";
+import { store, RootState } from "@/store"; // Import your RootState type
 
 const MenuManagement = () => {
   const { Search } = Input;
-
   const [messageApi, messageContextHolder] = message.useMessage();
   const [pageLoading, setPageLoading] = useState(false);
-
+  const [parentIdSelectionDisabled, setParentIdSelectionDisabled] = useState(false);
+  const [submitType, setSubmitType] = useState(0); // 0 for add, 1 for modify
+  const [modifyMenuId, setModifyMenuId] = useState<undefined | number>(undefined);
   const dispatch = useAppDispatch();
   const deleteMenuById = async (menuId: number | undefined) => {
     if (!pageLoading) {
@@ -84,13 +90,15 @@ const MenuManagement = () => {
         <Space size="middle">
           {record.parentId === 0 ? (
             <div>
-              <Button type="primary">Add Submenu</Button>
+              <Button type="primary" onClick={() => addSubmenuClickHandler(record.menuId)}>
+                Add Submenu
+              </Button>
             </div>
           ) : (
             <></>
           )}
 
-          <Button>Modify</Button>
+          <Button onClick={() => modifyMenuItem(record.menuId)}>Modify</Button>
 
           <Button onClick={() => deleteMenuById(record.menuId)} danger>
             Delete
@@ -99,6 +107,22 @@ const MenuManagement = () => {
       ),
     },
   ];
+
+  type ModalFormUsage = "ADD-FIRST-LEVEL" | "ADD-SECOND-LEVEL" | "MODIFY";
+
+  const addSubmenuClickHandler = (menuId: number | undefined) => {
+    showAddMenuModal(menuId, "ADD-SECOND-LEVEL");
+  };
+
+  const modifyMenuItem = (menuId: number | undefined) => {
+    if (menuId) {
+      // Access the current state from the Redux store
+      const state: RootState = store.getState();
+      // Use the custom selector function to get the menu item by menuId
+      const selectedMenuItem = selectMenuById(state, menuId);
+      showAddMenuModal(menuId, "MODIFY", selectedMenuItem);
+    }
+  };
 
   const SubmitButton: React.FC<React.PropsWithChildren<SubmitButtonProps>> = ({
     form,
@@ -129,6 +153,16 @@ const MenuManagement = () => {
     );
   };
 
+  const formInitialValues = {
+    menuNameL: "",
+    path: "",
+    menuType: 0,
+    uniqAuth: "",
+    parendId: undefined,
+    icon: "",
+    sort: undefined,
+  };
+
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const menuData = useAppSelector((state) => state.userInfoReducer.menuList);
@@ -152,36 +186,79 @@ const MenuManagement = () => {
     }
   }, []);
 
-  // useEffect(() => {
-  //   if (httpStatus === HttpStatus.Idle) dispatch(fetchSystemMenuList());
-  // }, []);
-
-  const showAddMenuModal = () => {
+  type ModalFormParentIdField = number | undefined;
+  /**
+   * Show a modal that contains menu form
+   *
+   * @param {ModalFormParentIdField} menuId : The passed in menuId
+   * @param {ModalFormUsage} modalUsage: the usage of this shoing modal:for modify, add first level, or add sencod level
+   */
+  const showAddMenuModal = (
+    menuId: ModalFormParentIdField = undefined,
+    modalUsage: ModalFormUsage,
+    selectedMenuItem: object | undefined = undefined
+  ) => {
     setOpen(true);
+    switch (modalUsage) {
+      case "ADD-FIRST-LEVEL":
+        setSubmitType(0);
+        setModifyMenuId(undefined);
+        setParentIdSelectionDisabled(false);
+        form.setFieldValue("parentId", menuId);
+        return;
+      case "ADD-SECOND-LEVEL":
+        setSubmitType(0);
+        setModifyMenuId(undefined);
+        setParentIdSelectionDisabled(true);
+        form.setFieldValue("parentId", menuId);
+        return;
+      case "MODIFY":
+        setSubmitType(1);
+        setModifyMenuId(menuId);
+        setParentIdSelectionDisabled(false);
+        fillFormData(selectedMenuItem);
+        return;
+    }
   };
 
-  const handleOk = async (values: AddSystemMenuItemRequestType) => {
-    //Need to access state to get radio group value
-    if (menuTypeRadiovValue === 0 || menuTypeRadiovValue === 1) {
-      values.menuType = menuTypeRadiovValue;
-      setConfirmLoading(true);
-      try {
+  const fillFormData = (selectedMenuItem: any) => {
+    form.setFieldsValue({
+      menuName: selectedMenuItem.menuName,
+      path: selectedMenuItem.path,
+      uniqAuth: selectedMenuItem.uniqAuth,
+      parentId: selectedMenuItem.parentId,
+      icon: selectedMenuItem.icon,
+      sort: selectedMenuItem.sort,
+      menuType: selectedMenuItem.menuType,
+    });
+  };
+
+  const handleOk = async (values: AddOrModifySystemMenuItemRequestType) => {
+    setConfirmLoading(true);
+    try {
+      //   submitType === 0 : add new data
+      if (submitType === 0) {
         const response = await addMenuItemApi(values);
-        messageApi.success(response.data);
-      } catch (error: any) {
-        messageApi.error(error.message);
-      } finally {
-        setOpen(false);
-        setConfirmLoading(false);
-        dispatch(fetchSystemMenuList());
-        dispatch(fetchUserAccessList(0));
+        messageApi.success(response.message);
+      } else {
+        //   submitType === 1 : modify existed data
+        let payload: AddOrModifySystemMenuItemRequestType = { ...values, menuId: modifyMenuId };
+        const response = await modifyMenuItemApi(payload);
+        messageApi.success(response.message);
       }
-    } else {
-      messageApi.warning("Menu Type Value is Invalid!");
+    } catch (error: any) {
+      messageApi.error(error.message);
+    } finally {
+      setOpen(false);
+      setConfirmLoading(false);
+      dispatch(fetchSystemMenuList());
+      dispatch(fetchUserAccessList(0));
+      form.resetFields();
     }
   };
 
   const handleCancel = () => {
+    form.resetFields();
     setOpen(false);
   };
 
@@ -212,10 +289,11 @@ const MenuManagement = () => {
   // Define the callback function to handle data from the child component
   const handleModalShowChange: OnChildDataChange = (data) => {
     setIconModalShow(data);
-    console.log("iconName...", iconName);
-    console.log("for...mmm", form);
-    form.setFieldValue("icon", iconName);
   };
+
+  useEffect(() => {
+    form.setFieldValue("icon", iconName);
+  }, [iconName]);
 
   return (
     <div>
@@ -223,15 +301,22 @@ const MenuManagement = () => {
       {messageContextHolder}
       <IconSelectionModal onModalShowChange={handleModalShowChange} iconModalShow={iconModalShow} />
       <Modal
-        title="Add Level One Menu Item"
+        title="Add Menu Item"
         open={open}
         width="55vw"
+        onCancel={handleCancel}
         footer={(_, e) => (
           <>
             <Form.Item>
               <Space>
                 <SubmitButton form={form}>Submit</SubmitButton>
-                <Button htmlType="reset">Reset</Button>
+                <Button
+                  onClick={() => {
+                    form.resetFields();
+                  }}
+                >
+                  Reset
+                </Button>
                 <Button onClick={handleCancel}>Cancel</Button>
               </Space>
             </Form.Item>
@@ -244,6 +329,7 @@ const MenuManagement = () => {
           layout="vertical"
           autoComplete="off"
           style={{ marginTop: "26px" }}
+          initialValues={formInitialValues}
         >
           <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
             <Col span={12}>
@@ -269,7 +355,7 @@ const MenuManagement = () => {
               <Form.Item name="parentId" label="Parent Level" rules={[{ required: true }]}>
                 <Select
                   options={options}
-                  disabled={false}
+                  disabled={parentIdSelectionDisabled}
                   placeholder="Parent Level Menu"
                   allowClear
                 />
@@ -302,8 +388,8 @@ const MenuManagement = () => {
 
           <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
             <Col span={12}>
-              <Form.Item name="menuType" label="Item Type">
-                <Radio.Group onChange={onRadioChange} value={menuTypeRadiovValue} defaultValue={0}>
+              <Form.Item name="menuType" label="Item Type" rules={[{ required: true }]}>
+                <Radio.Group onChange={onRadioChange} value={menuTypeRadiovValue}>
                   <Radio value={0}>Menu</Radio>
                   <Radio value={1}>API</Radio>
                 </Radio.Group>
@@ -312,7 +398,7 @@ const MenuManagement = () => {
           </Row>
         </Form>
       </Modal>
-      <Button onClick={showAddMenuModal} type="primary">
+      <Button onClick={() => showAddMenuModal(0, "ADD-FIRST-LEVEL")} type="primary">
         Add Menu Item
       </Button>
       <Divider></Divider>

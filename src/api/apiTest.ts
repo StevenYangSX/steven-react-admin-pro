@@ -1,4 +1,5 @@
-import HttpRequest from "@/utils/httpRequest";
+import HttpRequest from "./httpRequestExtention/httpRequest";
+
 
 export const serverHealthCheckApi = () => {
   return HttpRequest({
