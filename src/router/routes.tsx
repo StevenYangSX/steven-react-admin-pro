@@ -8,6 +8,7 @@ import Page3Sub3 from "@/pages/Page3Sub3";
 
 const DashBoard = lazy(() => import("@/pages/dashBoard/DashBoard"));
 const MenuManagement = lazy(() => import("@/pages/systemPages/MenuManagement"));
+const RoleManagement = lazy(() => import("@/pages/systemPages/RoleManagement"));
 const suspenseWrap = (component: JSX.Element) => {
   return <Suspense fallback={<div>loading.....</div>}>{component}</Suspense>;
 };
@@ -35,6 +36,10 @@ const routes = [
       {
         path: "/system/menu-management",
         element: suspenseWrap(<MenuManagement />),
+      },
+      {
+        path: "/system/role-management",
+        element: suspenseWrap(<RoleManagement />),
       },
       {
         path: "/order",

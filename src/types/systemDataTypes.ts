@@ -1,9 +1,11 @@
+import { TreeDataNode } from "antd";
 import { AxiosResponse } from "axios";
 
-export interface ExtendedAxiosResponse<T, D> extends AxiosResponse<T, D> {
+
+
+export interface ExtendedAxiosResponse<T> extends AxiosResponse<T> {
   message?: string;
-  T: T;
-  D: D;
+  data:T;
 }
 
 export interface SystemMenuItem {
@@ -15,6 +17,19 @@ export interface SystemMenuItem {
   path: string;
   menuName: string;
   uniqAuth: string;
+}
+
+
+export interface SystemRoleTableType {
+  roleId:number,
+  roleName:string,
+  access:string,
+}
+
+export interface SystemRoleListResponseType {
+  roleId:number,
+  authority:string,
+  menus:SystemMenuItem[]
 }
 
 export interface SysterUserInfo {
