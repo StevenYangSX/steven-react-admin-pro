@@ -306,6 +306,7 @@ const MenuManagement = () => {
       {messageContextHolder}
       <IconSelectionModal onModalShowChange={handleModalShowChange} iconModalShow={iconModalShow} />
       <Modal
+        forceRender
         title="Add Menu Item"
         open={open}
         width="55vw"

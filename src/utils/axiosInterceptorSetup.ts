@@ -43,7 +43,9 @@ import { catchAuthorizationError } from "@/store/slices/userInfoSlice";
               case 410001:
               case 410002:
               case 410003:
+              case 52000:
               case 51000:
+              case 50000:
                 return Promise.reject(response.data || {message:"Unknown Error!"})
               default:
                 break;

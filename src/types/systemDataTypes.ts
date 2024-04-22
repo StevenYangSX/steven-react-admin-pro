@@ -24,6 +24,7 @@ export interface SystemRoleTableType {
   roleId:number,
   roleName:string,
   access:string,
+  menus:SystemMenuItem[]
 }
 
 export interface SystemRoleListResponseType {

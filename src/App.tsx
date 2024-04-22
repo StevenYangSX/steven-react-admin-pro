@@ -13,6 +13,7 @@ const BeforeRouterEnter = () => {
   const { loading, authenticated } = useAuthentication();
   const navigate = useNavigate();
   useEffect(() => {
+    console.log("waht is outlet=============>", outlet);
     // Perform any logic before entering the route
     // For example, you can check if the user is authenticated
     if (!loading) {

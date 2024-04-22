@@ -4,7 +4,6 @@ import { Navigate } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import NotFoundPage from "@/pages/notFoundPage/NotFoundPage";
 import LoginPage from "@/pages/loginPage/LoginPage";
-import Page3Sub3 from "@/pages/Page3Sub3";
 
 const DashBoard = lazy(() => import("@/pages/dashBoard/DashBoard"));
 const MenuManagement = lazy(() => import("@/pages/systemPages/MenuManagement"));
@@ -25,10 +24,6 @@ const routes = [
         path: "/home",
         element: suspenseWrap(<DashBoard />),
       },
-      // {
-      //   path: "/page2",
-      //   element: suspenseWrap(<Page2 />),
-      // },
       {
         path: "/system",
         element: <Navigate to="/system/menu-management" />,
@@ -44,10 +39,6 @@ const routes = [
       {
         path: "/order",
         element: <Navigate to="/order/list" />,
-      },
-      {
-        path: "/order/list",
-        element: suspenseWrap(<Page3Sub3 />),
       },
     ],
   },

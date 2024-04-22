@@ -66,6 +66,9 @@ export const userInfoSlice = createSlice({
       state.error = null
       state.httpStatus = HttpStatus.Idle
       deleteLocalStorageData();
+    },
+    httpRequestFulfilled:(state) =>{
+      state.httpStatus = HttpStatus.Idle
     }
   },
   extraReducers(builder) {
