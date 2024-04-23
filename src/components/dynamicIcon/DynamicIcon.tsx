@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 function DynamicIcon({ iconName }: { iconName: string | undefined }) {
-  const [IconComponent, setIconComponent] = useState(null);
+  const [IconComponent, setIconComponent] = useState<string>("");
 
   useEffect(() => {
     const loadIcon = async () => {

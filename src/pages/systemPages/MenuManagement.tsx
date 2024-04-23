@@ -306,11 +306,12 @@ const MenuManagement = () => {
       {messageContextHolder}
       <IconSelectionModal onModalShowChange={handleModalShowChange} iconModalShow={iconModalShow} />
       <Modal
+        forceRender
         title="Add Menu Item"
         open={open}
         width="55vw"
         onCancel={handleCancel}
-        footer={(_, e) => (
+        footer={() => (
           <>
             <Form.Item>
               <Space>

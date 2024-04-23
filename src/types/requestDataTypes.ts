@@ -21,3 +21,35 @@ export interface deleteMenuByIdType {
 export interface getUserAccessListRequestType {
   userId: number | undefined;
 }
+
+
+
+export interface AddSystemRoleRequestType {
+  roleName:string,
+  access:number[]
+}
+
+export interface ModifySystemRoleRequestType extends AddSystemRoleRequestType {
+  roleId:number
+}
+
+export interface DeleteSystemRoleRequestType {
+  roleId:number
+}
+
+
+export interface DeleteSystemUserRequestType {
+  userId:number
+}
+
+export interface AddSystemUserRequestType {
+  username:string,
+  password:string,
+  passwordConfirmed:string,
+  nickname:string,
+  userRole:number[]
+}
+
+export interface UpdateSystemUserRequestType extends AddSystemUserRequestType {
+  userId:number
+}

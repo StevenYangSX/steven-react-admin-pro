@@ -4,10 +4,11 @@ import { Navigate } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import NotFoundPage from "@/pages/notFoundPage/NotFoundPage";
 import LoginPage from "@/pages/loginPage/LoginPage";
-import Page3Sub3 from "@/pages/Page3Sub3";
 
 const DashBoard = lazy(() => import("@/pages/dashBoard/DashBoard"));
 const MenuManagement = lazy(() => import("@/pages/systemPages/MenuManagement"));
+const RoleManagement = lazy(() => import("@/pages/systemPages/RoleManagement"));
+const UserManagement = lazy(() => import("@/pages/systemPages/UserManagement"));
 const suspenseWrap = (component: JSX.Element) => {
   return <Suspense fallback={<div>loading.....</div>}>{component}</Suspense>;
 };
@@ -24,10 +25,6 @@ const routes = [
         path: "/home",
         element: suspenseWrap(<DashBoard />),
       },
-      // {
-      //   path: "/page2",
-      //   element: suspenseWrap(<Page2 />),
-      // },
       {
         path: "/system",
         element: <Navigate to="/system/menu-management" />,
@@ -37,12 +34,12 @@ const routes = [
         element: suspenseWrap(<MenuManagement />),
       },
       {
-        path: "/order",
-        element: <Navigate to="/order/list" />,
+        path: "/system/role-management",
+        element: suspenseWrap(<RoleManagement />),
       },
       {
-        path: "/order/list",
-        element: suspenseWrap(<Page3Sub3 />),
+        path: "/system/user-management",
+        element: suspenseWrap(<UserManagement />),
       },
     ],
   },

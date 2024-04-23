@@ -6,9 +6,7 @@ export const getDataFromLocalStorageByName = (key: string) => {
   return null;
 };
 
-export const setDataToLocalStorageWithName = (key: string, payload: object) => {
-  return null;
-};
+
 
 
 export const deleteLocalStorageByName = (key:string) =>{

@@ -7,6 +7,8 @@ import { RootState } from "@/store";
 import MenuItem from "antd/es/menu/MenuItem";
 import { SystemMenuItem } from "@/types/systemDataTypes";
 import DynamicIcon from "../dynamicIcon/DynamicIcon";
+import { ItemType } from "antd/es/menu/hooks/useItems";
+import { MenuItemType } from "antd/lib/menu/hooks/useItems";
 type MenuItem = Required<MenuProps>["items"][number];
 
 function menuListItemConverter(systemMenuList: SystemMenuItem[]) {
@@ -107,7 +109,7 @@ const MainMenu: React.FC = () => {
         defaultSelectedKeys={[currentPath.pathname]}
         selectedKeys={[currentPath.pathname]}
         mode="inline"
-        items={menuItems}
+        items={menuItems as ItemType<MenuItemType>[]}
         onClick={menuItemClick}
         onOpenChange={handleMenuOpenChange}
         openKeys={openKeys}

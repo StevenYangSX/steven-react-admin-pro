@@ -1,8 +1,9 @@
 import { AddOrModifySystemMenuItemRequestType, deleteMenuByIdType } from "@/types/requestDataTypes";
 import HttpRequest from "./httpRequestExtention/httpRequest";
+import { SystemMenuItem } from "@/types/systemDataTypes";
 
 export const getSystemMenusApi = () => {
-  return HttpRequest({
+  return HttpRequest<SystemMenuItem[]>({
     url:"/systemMenu/menuList",
     method: "get",
   });
