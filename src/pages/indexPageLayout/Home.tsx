@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom";
 import MainMenu from "@/components/mainMenu/MainMenu";
 import UserInfoDropDown from "@/components/userInfoDropDown/UserInfoDropDown";
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Header, Content, Sider } = Layout;
 const BasicLayout: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
 

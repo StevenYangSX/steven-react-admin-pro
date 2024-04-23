@@ -67,7 +67,6 @@ const RoleManagement = () => {
   const [pageLoading, setPageLoading] = useState(false);
   const [submittable, setSubmittable] = useState(false);
   const [roleTableData, setRoleTableData] = useState<SystemRoleTableType[]>([]);
-  const [roleFormData, setRoleFormData] = useState<SystemRoleTableType[]>([]);
   const [treeData, setTreeData] = useState<TreeDataNode[]>([]);
   const [messageApi, messageContextHolder] = message.useMessage();
   const [roleFormModalOpen, setRoleFormModalOpen] = useState(false);
@@ -149,12 +148,15 @@ const RoleManagement = () => {
    * Fetch System Role data
    */
   const fetchSystemRolesList = async () => {
+    setPageLoading(true);
     try {
       const response = await getSystemRolesApi();
       setRoleTableData(roleTableDataConverter(response.data));
-      messageApi.success(response.message);
+      // messageApi.success(response.message);
     } catch (error: any) {
       messageApi.error(error.message);
+    } finally {
+      setPageLoading(false);
     }
   };
 
@@ -235,7 +237,7 @@ const RoleManagement = () => {
     form.setFieldValue("access", allCheckedMenuIds);
   };
 
-  const onSelect: TreeProps["onSelect"] = (selectedKeysValue, info) => {
+  const onSelect: TreeProps["onSelect"] = (selectedKeysValue) => {
     setSelectedKeys(selectedKeysValue);
   };
 
@@ -283,6 +285,8 @@ const RoleManagement = () => {
   };
 
   const handleCancel = () => {
+    form.resetFields();
+    setCheckedKeys([1]);
     setRoleFormModalOpen(false);
   };
 

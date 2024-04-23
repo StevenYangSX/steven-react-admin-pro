@@ -8,6 +8,7 @@ import LoginPage from "@/pages/loginPage/LoginPage";
 const DashBoard = lazy(() => import("@/pages/dashBoard/DashBoard"));
 const MenuManagement = lazy(() => import("@/pages/systemPages/MenuManagement"));
 const RoleManagement = lazy(() => import("@/pages/systemPages/RoleManagement"));
+const UserManagement = lazy(() => import("@/pages/systemPages/UserManagement"));
 const suspenseWrap = (component: JSX.Element) => {
   return <Suspense fallback={<div>loading.....</div>}>{component}</Suspense>;
 };
@@ -37,8 +38,8 @@ const routes = [
         element: suspenseWrap(<RoleManagement />),
       },
       {
-        path: "/order",
-        element: <Navigate to="/order/list" />,
+        path: "/system/user-management",
+        element: suspenseWrap(<UserManagement />),
       },
     ],
   },

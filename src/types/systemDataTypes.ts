@@ -1,4 +1,4 @@
-import { TreeDataNode } from "antd";
+
 import { AxiosResponse } from "axios";
 
 
@@ -27,6 +27,8 @@ export interface SystemRoleTableType {
   menus:SystemMenuItem[]
 }
 
+
+
 export interface SystemRoleListResponseType {
   roleId:number,
   authority:string,
@@ -38,3 +40,17 @@ export interface SysterUserInfo {
   userId: number;
   username: string;
 }
+
+interface Authority {
+  authority:string
+}
+export interface SystemAdminUserDataType {
+  userId:number,
+  username:string,
+  nickname:string,
+  enabled?:boolean,
+  accountNonLocked?:boolean
+  authorities?:Authority[]
+}
+
+

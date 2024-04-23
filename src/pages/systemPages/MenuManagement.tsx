@@ -311,7 +311,7 @@ const MenuManagement = () => {
         open={open}
         width="55vw"
         onCancel={handleCancel}
-        footer={(_, e) => (
+        footer={() => (
           <>
             <Form.Item>
               <Space>

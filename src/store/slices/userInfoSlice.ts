@@ -1,7 +1,7 @@
 
 import { HttpStatus, UserInfoState } from '@/types/systemStateTypes';
 import { createSlice ,createAsyncThunk} from '@reduxjs/toolkit'
-import { deleteLocalStorageData, getDataFromLocalStorageByName  ,deleteLocalStorageByName} from '@/utils/localStorageManager';
+import { deleteLocalStorageData, getDataFromLocalStorageByName  } from '@/utils/localStorageManager';
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { getSystemMenusApi } from '@/api/systemMenu';
 import { getUserAuthorizationApi } from '@/api/systemUser';
