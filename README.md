@@ -313,3 +313,48 @@ export const selectPostById = (state, postId) =>
 
 
 
+## 4. Deploy
+
+This project is currently using docker. Follows are docker file and some useful commands.
+
+```dockerfile
+# Dockerfile
+
+# Use an official Node.js runtime as the base image
+FROM node:20.4-alpine
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy package.json and package-lock.json to the container
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the application code to the container
+COPY . .
+
+# Build the React app
+# RUN npm run build
+
+# Expose the port the app runs on
+EXPOSE 5173
+
+# Command to run the app
+CMD ["npm", "run", "dev"]
+
+```
+
+```commonlisp
+# local dev
+docker build -t steven-admin-pro-frontend:latest .
+docker tag steven-admin-pro-frontend:latest stevenyangsx/steven-admin-pro-frontend:latest
+docker push stevenyangsx/steven-admin-pro-frontend:latest
+
+
+# server side
+docker pull stevenyangsx/steven-admin-pro-frontend:latest
+docker run -d -p 5173:5173 --restart always stevenyangsx/steven-admin-pro-frontend
+```
+

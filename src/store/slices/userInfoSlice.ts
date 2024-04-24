@@ -24,8 +24,8 @@ export const fetchSystemMenuList = createAsyncThunk('user/getSystemMenu', async 
 })
 
 
-export const fetchUserAccessList = createAsyncThunk<string[],any,{state:RootState}>('user/getUserAccessList',async (_payload:any, thunkAPI) =>{
-  const state:RootState = thunkAPI.getState();
+export const fetchUserAccessList = createAsyncThunk('user/getUserAccessList',async (_payload:any, thunkAPI) =>{
+  const state:RootState = thunkAPI.getState() as RootState;
   const requestBody:getUserAccessListRequestType = {userId:state.userInfoReducer.userInfo?.userId}
   const response = await getUserAuthorizationApi(requestBody)
   return response.data;
@@ -87,7 +87,7 @@ export const userInfoSlice = createSlice({
     })
     .addCase(fetchUserAccessList.fulfilled, (state,action) =>{
       if(state.userInfo) {
-        state.userInfo.access = action.payload;
+        state.userInfo.access = action.payload as string[] | undefined;
       } 
     })
 }
