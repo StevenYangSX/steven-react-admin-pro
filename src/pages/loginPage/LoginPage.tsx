@@ -1,4 +1,5 @@
 import { loginApi } from "@/api/authentication";
+import { getSystemMenusApi } from "@/api/systemMenu";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import {
   LoginFormPage,
@@ -7,42 +8,50 @@ import {
   ProFormText,
 } from "@ant-design/pro-components";
 import { Button, message, theme } from "antd";
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { userLogin } from "@/store/userInfoSlice";
-
+import { userLogin, systemMenuUpdate } from "@/store/slices/userInfoSlice";
+import { useAppSelector } from "@/hooks/reduxHooks";
 type LoginType = "phone" | "account";
 
 const Page = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const serverStatus = useAppSelector((state) => state.serverHealthReducer.serverRunning);
   const [loginType] = useState<LoginType>("account");
   const [messageApi, contextHolder] = message.useMessage();
   const { token } = theme.useToken();
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const getSystemMenu = async () => {
+    try {
+      const response = await getSystemMenusApi();
+      dispatch(systemMenuUpdate(response.data));
+    } catch (error) {}
+  };
+  useEffect(() => {
+    if (loggedIn) {
+      getSystemMenu();
+    }
+  }, [loggedIn]);
 
   const onSubmit = (p1: any) => {
-    console.log("111", p1);
     let payload = { username: p1.username, password: p1.password };
-
     loginApi(payload)
       .then((res) => {
-        //TODO after login success
-        // 1. update store, set login => true, set userInfo => user, set token => token...
-        console.log("login res...", res.data.token);
-
-        dispatch(userLogin(res.data.token));
-        navigate("/");
+        dispatch(userLogin(res.data));
+        setLoading(false);
+        setLoggedIn(true);
       })
       .catch((err) => {
-        console.log("err...", err);
         messageApi.open({
           type: "error",
           content: err.message,
+          duration: 5,
         });
+        setLoading(false);
       });
   };
+
   return (
     <div
       style={{
@@ -52,7 +61,10 @@ const Page = () => {
     >
       {contextHolder}
       <LoginFormPage
+        loading={loading}
+        disabled={!serverStatus}
         onFinish={async (values) => {
+          setLoading(true);
           await onSubmit(values);
           return true;
         }}
@@ -101,6 +113,7 @@ const Page = () => {
         {loginType === "account" && (
           <>
             <ProFormText
+              initialValue="admin"
               name="username"
               fieldProps={{
                 size: "large",
@@ -122,6 +135,7 @@ const Page = () => {
               ]}
             />
             <ProFormText.Password
+              initialValue="password"
               name="password"
               fieldProps={{
                 size: "large",

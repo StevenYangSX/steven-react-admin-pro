@@ -1,107 +1,77 @@
 import { useRoutes, useLocation, useNavigate } from "react-router-dom";
 import routes from "@/router/routes";
-import { useEffect, useState } from "react";
-import { serverHealthCheck } from "@/api/apiTest";
-import { Alert } from "antd";
+import { useEffect } from "react";
+import { Spin, message } from "antd";
 import useAuthentication from "./hooks/useAuthentication";
-// const ToHomePage = () => {
-//   const navigateTo = useNavigate();
-//   useEffect(() => {
-//     navigateTo("/page1");
-//   }, []);
-//   return <></>;
-// };
-
-// const ToLoginPage = () => {
-//   const navigateTo = useNavigate();
-//   useEffect(() => {
-//     navigateTo("/login");
-//   }, []);
-//   return <></>;
-// };
-
+import { fetchServerStatus } from "./store/slices/serverHealthSlice";
+import { useAppDispatch, useAppSelector } from "./hooks/reduxHooks";
+import { HttpStatus } from "./types/systemStateTypes";
+import setupAxiosInterceptors from "./utils/axiosInterceptorSetup";
 const BeforeRouterEnter = () => {
   const currentPath = useLocation();
   const outlet = useRoutes(routes);
-  const [shouldRender, setShouldRender] = useState(false);
-  /*
-  User Authentication Rules
-  1. if authenticated, and visti /login page, then direct to /home
-  2. if not authenticated, and visit other pages except /login page, direct to /login page.
-  3. other operations keep normal
-  */
-
-  // if (currentPath.pathname === "/login" && isAuthenticated) {
-  //   return <ToHomePage />;
-  // }
-  // if (currentPath.pathname !== "/login" && !isAuthenticated) {
-  //   return <ToLoginPage />;
-  // }
-  const isAuthenticated = useAuthentication();
-
+  const { loading, authenticated } = useAuthentication();
   const navigate = useNavigate();
-
   useEffect(() => {
     // Perform any logic before entering the route
     // For example, you can check if the user is authenticated
-
-    if (currentPath.pathname === "/login" && isAuthenticated) {
-      return navigate("/page1");
+    if (!loading) {
+      if (currentPath.pathname === "/login" && authenticated) {
+        return navigate("/home");
+      }
+      if (currentPath.pathname !== "/login" && !authenticated) {
+        return navigate("/login");
+      }
     }
-    if (currentPath.pathname !== "/login" && !isAuthenticated) {
-      return navigate("/login");
-    }
-    setShouldRender(true);
-  }, [currentPath.pathname, navigate]);
-
-  if (!shouldRender) {
-    return null; // or any placeholder component or loading indicator
-  }
+  }, [currentPath.pathname, authenticated, loading]);
   return outlet;
 };
 
 function App() {
-  const onClose = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    console.log(e, "I was closed.");
-  };
+  const dispatch = useAppDispatch();
+  const serverStatus = useAppSelector((state) => state.serverHealthReducer.serverRunning);
+  const serverStatusCheckProcess = useAppSelector((state) => state.serverHealthReducer.httpStatus);
+  const serverError = useAppSelector((state) => state.serverHealthReducer.error);
+  const [messageApi, contextHolder] = message.useMessage();
 
-  const [serverStatus, setServerStatus] = useState(false);
-  const [message, setMessage] = useState(null);
-
-  const serverCheck = async () => {
-    try {
-      const response: any = await serverHealthCheck();
-      setServerStatus(true);
-      setMessage(response.message);
-    } catch (error: any) {
-      console.log("error111=>", error);
-      setMessage(error.message);
+  /*
+   When configuring axios request interceptor, it needs to access store data. However, 
+   this causes a "early access" before store initializaion problem. 
+   So this configuration is moved to here, which ensures the store has been setup properly.
+  */
+  useEffect(() => {
+    setupAxiosInterceptors();
+  }, []);
+  useEffect(() => {
+    if (serverStatusCheckProcess === HttpStatus.Idle) {
+      dispatch(fetchServerStatus());
     }
-  };
-
-  // const serverAuth = async () => {
-  //   try {
-  //     const response = await serverAuthCheck();
-  //     console.log("response...", response);
-  //     setMessage(response.data.message);
-  //   } catch (error: any) {
-  //     console.log("error222=>", error);
-  //     setMessage(error.message);
-  //   }
-  // };
+  }, [serverStatusCheckProcess, dispatch]);
 
   useEffect(() => {
-    serverCheck();
-    //serverAuth();
-  }, []);
+    if (serverStatus) {
+      messageApi.open({
+        type: "success",
+        content: "Server is working",
+        duration: 3,
+      });
+    }
+    if (!serverStatus && serverError) {
+      messageApi.open({
+        type: "error",
+        content: serverError?.message,
+        duration: 3,
+      });
+    }
+  }, [serverStatus, serverError]);
   return (
     <>
-      <Alert
-        message={message}
-        type={serverStatus ? "success" : "error"}
-        closable
-        onClose={onClose}
+      <Spin
+        spinning={serverStatusCheckProcess === HttpStatus.Loading}
+        size="large"
+        fullscreen={true}
       />
+      {contextHolder}
       <BeforeRouterEnter />
     </>
   );
