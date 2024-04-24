@@ -7,7 +7,7 @@ function DynamicIcon({ iconName }: { iconName: string | undefined }) {
     const loadIcon = async () => {
       try {
         // Dynamically import the icon component based on the iconName
-        const iconModule = await import(`@ant-design/icons/`);
+        const iconModule = (await import(`@ant-design/icons/`)) as any;
         //TODO Fix this warning !
         if (iconName) {
           setIconComponent(iconModule[iconName]);
