@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Breadcrumb, Layout, theme } from "antd";
 import { Outlet } from "react-router-dom";
-import MainMenu from "@/components/mainMenu/MainMenu";
+import MainMenu from "@/components/MainMenu";
 import UserInfoDropDown from "@/components/userInfoDropDown/UserInfoDropDown";
 
 const { Header, Content, Sider } = Layout;
