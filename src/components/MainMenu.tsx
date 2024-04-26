@@ -6,7 +6,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { RootState } from "@/store";
 import MenuItem from "antd/es/menu/MenuItem";
 import { SystemMenuItem } from "@/types/systemDataTypes";
-import DynamicIcon from "../dynamicIcon/DynamicIcon";
+import DynamicIcon from "./dynamicIcon/DynamicIcon";
 import { ItemType } from "antd/es/menu/hooks/useItems";
 import { MenuItemType } from "antd/lib/menu/hooks/useItems";
 type MenuItem = Required<MenuProps>["items"][number];
