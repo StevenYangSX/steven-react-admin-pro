@@ -53,7 +53,7 @@ import { catchAuthorizationError } from "@/store/slices/userInfoSlice";
           },
           (error) => {
             // const navigate = useNavigate();
-            console.log("http error....",error)
+            // console.log("http error....",error)
             if (error && !error.response) {
               return Promise.reject(error);
             }

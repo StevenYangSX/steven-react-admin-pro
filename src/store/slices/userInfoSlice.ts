@@ -56,7 +56,12 @@ export const userInfoSlice = createSlice({
     },
     
     systemMenuUpdate: (state, action: PayloadAction<any>) => {
-      state.menuList= action.payload
+     
+      let response = action.payload;
+       response.map((ele: { key: any; menuId: { toString: () => any; }; })=>{
+        ele.key = ele.menuId?.toString()
+       })
+       state.menuList = response;
     },
     catchAuthorizationError:(state) =>{
       state.token = null;
@@ -77,7 +82,11 @@ export const userInfoSlice = createSlice({
         state.httpStatus = HttpStatus.Loading 
     })
     .addCase(fetchSystemMenuList.fulfilled, (state,action) =>{
-       state.menuList = action.payload;
+       let response = action.payload;
+       response.map(ele=>{
+        ele.key = ele.menuId?.toString()
+       })
+       state.menuList = response;
        state.httpStatus = HttpStatus.Idle
     })
     .addCase(fetchSystemMenuList.rejected, (state, action) =>{

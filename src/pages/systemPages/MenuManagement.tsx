@@ -279,8 +279,8 @@ const MenuManagement = () => {
 
   const [form] = Form.useForm();
 
-  const onSearch: SearchProps["onSearch"] = (value, _e, info) => {
-    console.log(info?.source, value);
+  const onSearch: SearchProps["onSearch"] = (_value, _e, info) => {
+    // console.log(info?.source, value);
     if (info?.source !== "clear") {
       setIconModalShow(true);
     }

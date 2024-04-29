@@ -17,10 +17,12 @@ export interface SystemMenuItem {
   path: string;
   menuName: string;
   uniqAuth: string;
+  
 }
 
 
 export interface SystemRoleTableType {
+  key?:string | number,
   roleId:number,
   roleName:string,
   access:string,
@@ -45,6 +47,7 @@ interface Authority {
   authority:string
 }
 export interface SystemAdminUserDataType {
+  key?:number | string,
   userId:number,
   username:string,
   nickname:string,

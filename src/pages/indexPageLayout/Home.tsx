@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Breadcrumb, Layout, theme } from "antd";
+import { Layout, theme } from "antd";
+import BreadCrumb from "@/components/breadCrumb/BreadCrumb";
 import { Outlet } from "react-router-dom";
 import MainMenu from "@/components/MainMenu";
 import UserInfoDropDown from "@/components/userInfoDropDown/UserInfoDropDown";
@@ -34,10 +35,7 @@ const BasicLayout: React.FC = () => {
             alignItems: "center",
           }}
         >
-          <Breadcrumb style={{ margin: "0 0 0 16px" }}>
-            <Breadcrumb.Item>User</Breadcrumb.Item>
-            <Breadcrumb.Item>Bill</Breadcrumb.Item>
-          </Breadcrumb>
+          <BreadCrumb />
 
           <UserInfoDropDown />
         </Header>

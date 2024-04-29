@@ -10,7 +10,6 @@ export const getDataFromLocalStorageByName = (key: string) => {
 
 
 export const deleteLocalStorageByName = (key:string) =>{
-  console.log("found delete staorage")
   localStorage.removeItem(key);
 }
 
