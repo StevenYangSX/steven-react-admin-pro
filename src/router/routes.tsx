@@ -1,17 +1,14 @@
 import Home from "@/pages/indexPageLayout/Home";
 
 import { Navigate } from "react-router-dom";
-import { lazy, Suspense } from "react";
+import { lazy } from "react";
 import NotFoundPage from "@/pages/notFoundPage/NotFoundPage";
 import LoginPage from "@/pages/loginPage/LoginPage";
-
+import reactKeysRoutes from "./modules/reactKyes";
+import systemSetting from "./modules/systemSetting";
+import SuspenseWrap from "./SuspenseWrap";
 const DashBoard = lazy(() => import("@/pages/dashBoard/DashBoard"));
-const MenuManagement = lazy(() => import("@/pages/systemPages/MenuManagement"));
-const RoleManagement = lazy(() => import("@/pages/systemPages/RoleManagement"));
-const UserManagement = lazy(() => import("@/pages/systemPages/UserManagement"));
-const suspenseWrap = (component: JSX.Element) => {
-  return <Suspense fallback={<div>loading.....</div>}>{component}</Suspense>;
-};
+
 const routes = [
   {
     path: "/",
@@ -23,24 +20,10 @@ const routes = [
     children: [
       {
         path: "/home",
-        element: suspenseWrap(<DashBoard />),
+        element: SuspenseWrap(<DashBoard />),
       },
-      {
-        path: "/system",
-        element: <Navigate to="/system/menu-management" />,
-      },
-      {
-        path: "/system/menu-management",
-        element: suspenseWrap(<MenuManagement />),
-      },
-      {
-        path: "/system/role-management",
-        element: suspenseWrap(<RoleManagement />),
-      },
-      {
-        path: "/system/user-management",
-        element: suspenseWrap(<UserManagement />),
-      },
+      ...reactKeysRoutes,
+      ...systemSetting,
     ],
   },
   {
