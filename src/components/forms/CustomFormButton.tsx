@@ -27,9 +27,7 @@ const CustomFormButton: React.FC<React.PropsWithChildren<SubmitButtonProps>> = (
       .catch(() => setSubmittable(false));
   }, [form, values]);
 
-  React.useEffect(() => {
-    console.log("chjeck loading....", confirmLoading);
-  }, [confirmLoading]);
+  React.useEffect(() => {}, [confirmLoading]);
 
   return (
     <Button
