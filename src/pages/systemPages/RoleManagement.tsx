@@ -169,6 +169,7 @@ const RoleManagement = () => {
     let roleTableDataArray: SystemRoleTableType[] = [];
     originalData.map((item) => {
       roleTableDataArray.push({
+        key: item.roleId,
         roleId: item.roleId,
         roleName: item.authority,
         menus: item.menus,
@@ -211,7 +212,6 @@ const RoleManagement = () => {
   }, [menuList, menuListHttpStatus]);
 
   useEffect(() => {
-    console.log("form values..", form.getFieldsValue());
     form
       .validateFields()
       .then(() => {
@@ -222,7 +222,6 @@ const RoleManagement = () => {
       });
   }, [form, watchFormFieldRoleName, watchFormFieldAccess]);
   const onExpand: TreeProps["onExpand"] = (expandedKeysValue) => {
-    console.log("onExpand", expandedKeysValue);
     // if not set autoExpandParent to false, if children expanded, parent can not collapse.
     // or, you can remove all expanded children keys.
     setExpandedKeys(expandedKeysValue);

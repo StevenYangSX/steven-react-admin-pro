@@ -229,10 +229,13 @@ const UserManagement = () => {
   const fetchAdminUserList = async () => {
     try {
       const response = await getSystemAdminUserListApi();
+      //Add key
+      response.data.map((ele) => {
+        ele.key = ele.userId;
+      });
       setUserTableData(response.data);
-      console.log("ressss", response);
-    } catch (error) {
-      console.log("errr", error);
+    } catch (error: any) {
+      messageApi.error(error.message);
     }
   };
 
@@ -241,9 +244,9 @@ const UserManagement = () => {
     setUserFormModalOpen(true);
   };
 
-  const handleSelectionChange = (value: string[]) => {
-    console.log(`selected ${value}`);
-  };
+  // const handleSelectionChange = (value: string[]) => {
+  //   console.log(`selected ${value}`);
+  // };
 
   // Custom validation function for confirming password
   const validatePasswordConfirmation = async (_: any, value: string) => {
@@ -350,7 +353,7 @@ const UserManagement = () => {
                   allowClear
                   style={{ width: "100%" }}
                   placeholder="Please select user's role"
-                  onChange={handleSelectionChange}
+                  // onChange={handleSelectionChange}
                   options={selectOptions}
                 />
               </Form.Item>
