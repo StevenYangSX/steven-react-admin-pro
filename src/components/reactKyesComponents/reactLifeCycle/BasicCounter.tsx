@@ -81,7 +81,19 @@ export default class BasicCounter extends Component<BasicCounterPropType, BasicC
             closable
           />
         ) : null}
-
+        <h2
+          style={{
+            margin: "10px",
+            marginLeft: "auto",
+            marginRight: "auto",
+            display: "flex",
+            width: "300px",
+            justifyContent: "space-evenly",
+            alignItems: "center",
+          }}
+        >
+          props data : {percent}
+        </h2>
         <Progress
           style={{
             margin: "10px",

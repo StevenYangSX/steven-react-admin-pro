@@ -1,5 +1,5 @@
 import ReactDOM from "react-dom/client";
-import "reset-css";
+// import "reset-css";
 // ui framewokr import
 
 // global css import

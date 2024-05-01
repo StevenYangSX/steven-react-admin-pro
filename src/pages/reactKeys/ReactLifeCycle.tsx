@@ -1,8 +1,10 @@
 import { Component } from "react";
 import { Divider } from "antd";
-import { Alert } from "antd";
-import LifeCycleHooks from "@/components/reactKyesComponents/LifeCycleHooks";
-import BasicCounter from "@/components/reactKyesComponents/BasicCounter";
+import { Alert, Image } from "antd";
+import LifeCycleHooks from "@/components/reactKyesComponents/reactLifeCycle/LifeCycleHooks";
+import lifecycleImg from "@/assets/images/react_life_cycle.png"; // Adjust the path accordingly
+
+import BasicCounter from "@/components/reactKyesComponents/reactLifeCycle/BasicCounter";
 interface CounterState {
   count: number;
   consturctorAlert: boolean;
@@ -100,20 +102,21 @@ export default class ReactLifeCycle extends Component<{}, CounterState> {
             marginLeft: "auto",
             marginRight: "auto",
             display: "flex",
-            width: "300px",
+            width: "400px",
             justifyContent: "space-evenly",
             alignItems: "center",
           }}
         >
+          <Image width={200} src={lifecycleImg} />
           <button onClick={this.decrementCount}>-</button>
-          <span>{this.state.count}</span>
+          <span>state data : {this.state.count}</span>
           <button onClick={this.incrementCount}>+</button>
         </div>
 
         <Divider />
         <BasicCounter count={this.state.count} />
         <Divider />
-        <LifeCycleHooks />
+        <LifeCycleHooks count={this.state.count} />
       </>
     );
   }
