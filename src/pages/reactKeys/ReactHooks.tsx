@@ -1,11 +1,13 @@
 import { Divider, Tabs } from "antd";
-import React from "react";
+import React, { useState } from "react";
 import type { TabsProps } from "antd";
 import UseStateHook from "@/components/reactKyesComponents/reactBuiltinHooks/UseStateHook";
 import UseEffectHook from "@/components/reactKyesComponents/reactBuiltinHooks/UseEffectHook";
+import UseRefHook from "@/components/reactKyesComponents/reactBuiltinHooks/UseRefHook";
 const ReactKeys: React.FC = () => {
+  const [currentShowingTab, setCurrentShowingTab] = useState<string>("");
   const onChange = (key: string) => {
-    console.log(key);
+    setCurrentShowingTab(key);
   };
   const items: TabsProps["items"] = [
     {
@@ -21,7 +23,7 @@ const ReactKeys: React.FC = () => {
     {
       key: "3",
       label: "useRef",
-      children: "Content of Tab Pane 3",
+      children: <UseRefHook activeKey={currentShowingTab} />,
     },
     {
       key: "4",

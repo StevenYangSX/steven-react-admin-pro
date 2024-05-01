@@ -33,6 +33,7 @@ const UseEffectHook = () => {
   useEffect(() => {
     serverHealthCheckApi()
       .then((res) => {
+        console.log("first", res.message);
         setServerStatus(res.message === "Success" ? true : false);
       })
       .catch((_error) => {
@@ -63,19 +64,24 @@ const UseEffectHook = () => {
       <Divider />
       <h4>2. Fetch data in useEffect() : The server_status data is fetched in useEffech().</h4>
       <p>
-        server_status :{" "}
-        {serverStatus === true ? <Tag color="success">Running</Tag> : <Tag color="error">Down</Tag>}
-        <Alert
-          style={{ marginTop: "14px" }}
-          message="Fetching data in useEffect has significant downsides"
-          description={customDescription}
-          type="info"
-          closable
-        />
+        server_status : {"  "}
+        {serverStatus === true ? (
+          <Tag color="success">Running</Tag>
+        ) : (
+          <Tag color="error">Down</Tag>
+        )}{" "}
       </p>
+      <Alert
+        style={{ marginTop: "14px" }}
+        message="Fetching data in useEffect has significant downsides"
+        description={customDescription}
+        type="info"
+        closable
+      />
+
       <Divider />
-      <h4>3. "Watch" reactive data </h4>
-      <WatchSimulator mousePosition={position} />
+      <h4>3. "Watch" reactive data : Use useEffect() to "watch" form data</h4>
+      <WatchSimulator />
     </>
   );
 };
