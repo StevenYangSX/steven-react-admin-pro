@@ -4,6 +4,7 @@ import type { TabsProps } from "antd";
 import UseStateHook from "@/components/reactKyesComponents/reactBuiltinHooks/UseStateHook";
 import UseEffectHook from "@/components/reactKyesComponents/reactBuiltinHooks/UseEffectHook";
 import UseRefHook from "@/components/reactKyesComponents/reactBuiltinHooks/UseRefHook";
+import UseMemoHook from "@/components/reactKyesComponents/reactBuiltinHooks/UseMemoHook";
 const ReactKeys: React.FC = () => {
   const [currentShowingTab, setCurrentShowingTab] = useState<string>("");
   const onChange = (key: string) => {
@@ -28,7 +29,7 @@ const ReactKeys: React.FC = () => {
     {
       key: "4",
       label: "useMemo",
-      children: "Content of Tab Pane 3",
+      children: <UseMemoHook />,
     },
     {
       key: "5",
