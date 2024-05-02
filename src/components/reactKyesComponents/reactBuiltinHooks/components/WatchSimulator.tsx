@@ -1,5 +1,5 @@
 import { Divider } from "antd";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const WatchSimulator = () => {
   const [username, setUsername] = useState<string | null>("");

@@ -1,7 +1,5 @@
 import Map from "@/components/map/Map";
 import { Divider } from "antd";
-import React from "react";
-
 const UseMemoHook = () => {
   return (
     <>

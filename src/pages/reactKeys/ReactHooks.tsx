@@ -1,4 +1,4 @@
-import { Divider, Tabs } from "antd";
+import { Tabs } from "antd";
 import React, { useState } from "react";
 import type { TabsProps } from "antd";
 import UseStateHook from "@/components/reactKyesComponents/reactBuiltinHooks/UseStateHook";
