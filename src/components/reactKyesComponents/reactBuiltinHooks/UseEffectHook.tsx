@@ -33,7 +33,6 @@ const UseEffectHook = () => {
   useEffect(() => {
     serverHealthCheckApi()
       .then((res) => {
-        console.log("first", res.message);
         setServerStatus(res.message === "Success" ? true : false);
       })
       .catch((_error) => {

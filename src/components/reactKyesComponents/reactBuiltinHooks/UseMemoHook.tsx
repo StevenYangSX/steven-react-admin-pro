@@ -7,10 +7,11 @@ const UseMemoHook = () => {
         <code>useMemo</code> lets you cache the result of a calculation between re-renders.
       </h4>
       <p>
-        This heatmap's data ues useMemo to cache the fitlered data. Also, The control panel uses{" "}
-        <code>React.memo()</code> to stop re-render when props changes.
+        This heatmap's data ues <code>useMemo</code> to cache the fitlered data. Also, The control
+        panel uses <code>React.memo()</code> to skip re-rendering when its props are unchanged.
       </p>
       <Divider />
+
       <Map />
     </>
   );

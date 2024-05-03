@@ -89,7 +89,7 @@ export default class ReactLifeCycle extends Component<{}, CounterState> {
             marginLeft: "auto",
             marginRight: "auto",
             display: "flex",
-            width: "300px",
+            width: "500px",
             justifyContent: "space-evenly",
             alignItems: "center",
           }}
