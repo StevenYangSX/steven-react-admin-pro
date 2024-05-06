@@ -1,4 +1,4 @@
-import { GetProp, TableProps, Table, message, Tag, Rate } from "antd";
+import { TableProps, Table, message, Tag, Rate } from "antd";
 import { useState, useEffect } from "react";
 import { getCustomerListApi } from "@/api/Customer";
 import { PageableRequestType } from "@/types/requestDataTypes";

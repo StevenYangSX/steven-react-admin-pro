@@ -1,5 +1,4 @@
 import { SorterResult } from "antd/lib/table/interface";
-import { Key } from "react";
 import { SystemCustomerType } from "./systemDataTypes";
 
 export interface LoginRequestType {
