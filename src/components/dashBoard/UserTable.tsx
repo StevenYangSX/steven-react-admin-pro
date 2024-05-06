@@ -5,30 +5,32 @@ import { PageableRequestType } from "@/types/requestDataTypes";
 import { SystemCustomerType } from "@/types/systemDataTypes";
 import Setting from "@/setting";
 import { MoneyCollectFilled } from "@ant-design/icons";
+import { SorterResult } from "antd/lib/table/interface";
 type ColumnsType<T> = TableProps<T>["columns"];
-type TablePaginationConfig = Exclude<GetProp<TableProps, "pagination">, boolean>;
 
-interface TableParams {
-  pagination?: TablePaginationConfig;
-  sortField?: string;
-  sortOrder?: string;
-  filters?: Parameters<GetProp<TableProps, "onChange">>[1];
-}
 const columns: ColumnsType<SystemCustomerType> = [
   {
     title: "User ID",
     dataIndex: "userId",
-    width: 80,
+    width: 100,
     align: "center",
     fixed: "left",
+    sorter: {
+      compare: (a, b) => a.userId - b.userId,
+      multiple: 3,
+    },
   },
   {
     title: "Customer Name",
     dataIndex: ["firstName", "lastName"],
-    sorter: true,
+    sorter: {
+      compare: (a, b) => a.firstName.localeCompare(b.firstName),
+      multiple: 2,
+    },
     render: (_, record) => {
       return record.firstName + ` ` + record.lastName;
     },
+
     width: "20%",
     align: "center",
     fixed: "left",
@@ -89,6 +91,10 @@ const columns: ColumnsType<SystemCustomerType> = [
         </Tag>
       );
     },
+    sorter: {
+      compare: (a, b) => a.remainingMoney - b.remainingMoney,
+      multiple: 1,
+    },
   },
 ];
 
@@ -100,13 +106,14 @@ const UserTable = () => {
   const [pageableParams, setPageableParams] = useState<PageableRequestType>({
     current: 1,
     pageSize: Setting.defaultPageSize,
+    sort: undefined,
   });
 
   const fetchData = () => {
     setLoading(true);
     getCustomerListApi(pageableParams)
       .then((res) => {
-        setData(res.data.content);
+        setData(res.data?.content);
         setLoading(false);
         setPageableParams({
           ...pageableParams,
@@ -122,8 +129,18 @@ const UserTable = () => {
     fetchData();
   }, [pageableParams.current, pageableParams.pageSize]);
 
-  const handleTableChange: TableProps["onChange"] = (pagination, _filters, _sorter) => {
-    setPageableParams(pagination);
+  const handleTableChange: TableProps["onChange"] = (
+    pagination,
+    _filters,
+    sorter: SorterResult<SystemCustomerType> | SorterResult<SystemCustomerType>[]
+  ) => {
+    console.log("sorted...", sorter);
+    setPageableParams({
+      ...pageableParams,
+      current: pagination.current,
+      pageSize: pagination.pageSize,
+      sort: sorter,
+    });
     // setTableParams({
     //   pagination,
     //   filters,

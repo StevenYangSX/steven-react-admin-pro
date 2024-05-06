@@ -1,3 +1,7 @@
+import { SorterResult } from "antd/lib/table/interface";
+import { Key } from "react";
+import { SystemCustomerType } from "./systemDataTypes";
+
 export interface LoginRequestType {
   username: string;
   password: string;
@@ -54,12 +58,11 @@ export interface UpdateSystemUserRequestType extends AddSystemUserRequestType {
   userId:number
 }
 
-type SortType = "DESC" | "ASC"
 
 export interface PageableRequestType {
   current?:number,
   pageSize?:number,
-  sort?: SortType,
+  sort?: SorterResult<SystemCustomerType> |  SorterResult<SystemCustomerType>[],
   total?:number
 
 }
