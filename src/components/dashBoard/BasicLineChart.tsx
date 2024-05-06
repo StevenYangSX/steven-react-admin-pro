@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useCallback } from "react";
 // Import the echarts core module, which provides the necessary interfaces for using echarts.
 import * as echarts from "echarts/core";
 
@@ -12,7 +12,6 @@ import {
   DatasetComponent,
   TransformComponent,
   LegendComponent,
-  ToolboxComponent,
 } from "echarts/components";
 
 // Features like Universal Transition and Label Layout
@@ -22,12 +21,11 @@ import { LabelLayout, UniversalTransition } from "echarts/features";
 // Note that including the CanvasRenderer or SVGRenderer is a required step
 import { CanvasRenderer } from "echarts/renderers";
 
-const BasicLineChart = () => {
+const BasicLineChart = ({ stackLineData }: { stackLineData: Array<Array<number>> }) => {
   const chartRef = useRef(null);
-  useEffect(() => {
-    // Register the required components
+  // Create the chart instance using useCallback
+  const createChartInstance = useCallback(() => {
     echarts.use([
-      ToolboxComponent,
       LegendComponent,
       LineChart,
       TitleComponent,
@@ -40,27 +38,25 @@ const BasicLineChart = () => {
       CanvasRenderer,
     ]);
     const chart = echarts.init(chartRef.current);
-
     const options = {
       title: {
-        text: "Stacked Line",
+        text: "Exaple Stack Line Chart",
+        top: "top", // Position title at the middle vertically
+        left: "center", // Position title at the center horizontally
       },
       tooltip: {
         trigger: "axis",
       },
       legend: {
-        data: ["Email", "Union Ads", "Video Ads", "Direct", "Search Engine"],
+        data: ["Video Ads", "Direct", "Search Engine"],
+        top: "bottom", // Position legend at the bottom
+        left: "center", // Align legend to the center horizontally
       },
       grid: {
-        left: "3%",
-        right: "4%",
-        bottom: "3%",
-        containLabel: true,
-      },
-      toolbox: {
-        feature: {
-          saveAsImage: {},
-        },
+        top: 40, // Adjust top padding to make space for title
+        left: 60,
+        right: 60,
+        bottom: 80, // Adjust bottom padding to make space for legend
       },
       xAxis: {
         type: "category",
@@ -72,46 +68,72 @@ const BasicLineChart = () => {
       },
       series: [
         {
-          name: "Email",
-          type: "line",
-          stack: "Total",
-          data: [120, 132, 101, 134, 90, 230, 210],
-        },
-        {
-          name: "Union Ads",
-          type: "line",
-          stack: "Total",
-          data: [220, 182, 191, 234, 290, 330, 310],
-        },
-        {
           name: "Video Ads",
           type: "line",
           stack: "Total",
-          data: [150, 232, 201, 154, 190, 330, 410],
+          data: [],
         },
         {
           name: "Direct",
           type: "line",
           stack: "Total",
-          data: [320, 332, 301, 334, 390, 330, 320],
+          data: [],
         },
         {
           name: "Search Engine",
           type: "line",
           stack: "Total",
-          data: [820, 932, 901, 934, 1290, 1330, 1320],
+          data: [],
         },
       ],
     };
-
     chart.setOption(options);
+    return chart;
+  }, []); // Empty depende
 
+  useEffect(() => {
+    const chart = createChartInstance();
     // Clean up chart instance on unmount
     return () => {
       chart.dispose();
     };
   }, []);
+
+  useEffect(() => {
+    if (chartRef.current) {
+      const chart = echarts.getInstanceByDom(chartRef.current);
+      if (chart) {
+        let currentOptions = chart.getOption();
+        currentOptions.series = [
+          {
+            name: "Video Ads",
+            type: "line",
+            stack: "Total",
+            data: stackLineData[0],
+          },
+          {
+            name: "Direct",
+            type: "line",
+            stack: "Total",
+            data: stackLineData[1],
+          },
+          {
+            name: "Search Engine",
+            type: "line",
+            stack: "Total",
+            data: stackLineData[2],
+          },
+        ];
+        (currentOptions.legend = {
+          data: ["Video Ads", "Direct", "Search Engine"],
+          top: "bottom", // Position legend at the bottom
+          left: "center", // Align legend to the center horizontally
+        }),
+          chart.setOption(currentOptions);
+      }
+    }
+  }, [stackLineData]);
   return <div ref={chartRef} style={{ width: "100%", height: "100%" }} />;
 };
 
-export default BasicLineChart;
+export default React.memo(BasicLineChart);

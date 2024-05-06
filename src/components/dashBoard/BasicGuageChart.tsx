@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useCallback } from "react";
 // Import the echarts core module, which provides the necessary interfaces for using echarts.
 import * as echarts from "echarts/core";
 
@@ -11,6 +11,7 @@ import {
   GridComponent,
   DatasetComponent,
   TransformComponent,
+  LegendComponent,
 } from "echarts/components";
 
 // Features like Universal Transition and Label Layout
@@ -22,9 +23,10 @@ import { CanvasRenderer } from "echarts/renderers";
 
 const BasicGuageChart = ({ guageData }: { guageData: number }) => {
   const chartRef = useRef(null);
-  useEffect(() => {
-    // Register the required components
+
+  const createChartInstance = useCallback(() => {
     echarts.use([
+      LegendComponent,
       GaugeChart,
       TitleComponent,
       TooltipComponent,
@@ -36,8 +38,12 @@ const BasicGuageChart = ({ guageData }: { guageData: number }) => {
       CanvasRenderer,
     ]);
     const chart = echarts.init(chartRef.current);
-
     const options = {
+      title: {
+        text: "Basic Guage Chart",
+        top: "top", // Position title at the middle vertically
+        left: "center", // Position title at the center horizontally
+      },
       tooltip: {
         formatter: "{a} <br/>{b} : {c}%",
       },
@@ -54,22 +60,62 @@ const BasicGuageChart = ({ guageData }: { guageData: number }) => {
           },
           data: [
             {
-              value: guageData,
+              value: 0,
               name: "SCORE",
             },
           ],
         },
       ],
     };
-
     chart.setOption(options);
+    return chart;
+  }, []); // Empty depende
 
+  useEffect(() => {
+    const chart = createChartInstance();
     // Clean up chart instance on unmount
     return () => {
       chart.dispose();
     };
+  }, []);
+
+  useEffect(() => {
+    const chart = createChartInstance();
+    // Clean up chart instance on unmount
+    return () => {
+      chart.dispose();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (chartRef.current) {
+      const chart = echarts.getInstanceByDom(chartRef.current);
+      if (chart) {
+        let currentOptions = chart.getOption();
+        currentOptions.series = [
+          {
+            name: "Pressure",
+            type: "gauge",
+            progress: {
+              show: true,
+            },
+            detail: {
+              valueAnimation: true,
+              formatter: "{value}",
+            },
+            data: [
+              {
+                value: guageData,
+                name: "SCORE",
+              },
+            ],
+          },
+        ];
+        chart.setOption(currentOptions);
+      }
+    }
   }, [guageData]);
   return <div ref={chartRef} style={{ width: "100%", height: "100%" }} />;
 };
 
-export default BasicGuageChart;
+export default React.memo(BasicGuageChart);

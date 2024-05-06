@@ -53,3 +53,13 @@ export interface AddSystemUserRequestType {
 export interface UpdateSystemUserRequestType extends AddSystemUserRequestType {
   userId:number
 }
+
+type SortType = "DESC" | "ASC"
+
+export interface PageableRequestType {
+  current?:number,
+  pageSize?:number,
+  sort?: SortType,
+  total?:number
+
+}

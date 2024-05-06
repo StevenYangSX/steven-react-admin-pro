@@ -5,6 +5,7 @@ import ExampleBarChart from "@/components/dashBoard/ExampleBarChart";
 import { Divider, Row, Col, Button, message } from "antd";
 import { useEffect, useState, useRef } from "react";
 import { updateSseStatus } from "@/api/sseStatus";
+import UserTable from "@/components/dashBoard/UserTable";
 const style: React.CSSProperties = {
   height: "250px",
   minWidth: "300px",
@@ -12,10 +13,17 @@ const style: React.CSSProperties = {
 const DashBoard = () => {
   const [messageApi, messageContext] = message.useMessage();
   const [span, setSpan] = useState(6);
-  const [barData, setBarData] = useState([15, 25, 55, 232, 123, 19]);
+  const [barData, setBarData] = useState([15, 25, 55, 232, 123, 19, 180]);
   const [guageData, setGuageData] = useState(50);
   const componentRef = useRef<HTMLDivElement>(null);
   const [syncStatus, setSyncStatus] = useState(false);
+  const [stackLineData, setStackLineData] = useState([
+    [240, 120, 190, 432, 720, 580, 1200],
+    [1200, 1400, 880, 230, 580, 1000, 2300],
+    [921, 231, 543, 456, 1234, 2349, 213],
+  ]);
+  const [radarData, setRadarData] = useState([[16000, 14000, 18000, 6800, 9999]]);
+
   useEffect(() => {
     const updateWidth = () => {
       if (componentRef.current) {
@@ -53,9 +61,10 @@ const DashBoard = () => {
       sseDataEvent = new EventSource("http://localhost:8000/sse/test");
       sseDataEvent.onmessage = (event) => {
         let sseDataParsed = JSON.parse(event.data);
-        console.log(sseDataParsed);
         setBarData(sseDataParsed.barchartData);
         setGuageData(sseDataParsed.guage);
+        setStackLineData(sseDataParsed.stackLineData);
+        setRadarData(sseDataParsed.radarData);
       };
     } else {
       sseDataEvent?.close();
@@ -80,28 +89,32 @@ const DashBoard = () => {
     <>
       <div ref={componentRef}>
         {messageContext}
-        <h4>Fake Marketing Dashborad</h4>
-        {syncStatus ? (
-          <Button onClick={changeSyncStatus}>Terminate Sync</Button>
-        ) : (
-          <Button onClick={changeSyncStatus}>Start Sync</Button>
-        )}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-around" }}>
+          <h4>Fake Marketing Dashborad : Implemented by SSE to make it dynamic</h4>
+          {syncStatus ? (
+            <Button onClick={changeSyncStatus}>Terminate Sync</Button>
+          ) : (
+            <Button onClick={changeSyncStatus}>Start Sync</Button>
+          )}
+        </div>
+
         <Divider />
         <Row gutter={[24, 24]}>
           <Col span={span} style={style}>
             <ExampleBarChart dataSeries={barData} />
           </Col>
           <Col span={span} style={style}>
-            <BasicLineChart />
+            <BasicLineChart stackLineData={stackLineData} />
           </Col>
           <Col span={span} style={style}>
-            <BasicRadarChart />
+            <BasicRadarChart radarData={radarData} />
           </Col>
           <Col span={span} style={style}>
             <BasicGuageChart guageData={guageData} />
           </Col>
         </Row>
         <Divider />
+        <UserTable />
       </div>
     </>
   );
