@@ -12,6 +12,9 @@ const Setting = {
   //staging 请求地址
   //apiStagingURL: VUE_APP_STAGINGBASEURL,
 
+  //Default Pagination pageSize
+  defaultPageSize:50,
+  
   modalDuration: 3,
   // 接口请求返回错误时，弹窗的类型，可选值为 Message 或 Notice
   errorModalType: "Message",
