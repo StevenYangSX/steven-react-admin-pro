@@ -1,15 +1,16 @@
 // const VUE_APP_API_URL = process.env.VUE_APP_BASEURL;
 // const VUE_APP_STAGINGBASEURL = process.env.VUE_APP_STAGINGBASEURL;
+const BASE_RUL = import.meta.env.API_BASE_URL;
 
-const VUE_APP_API_URL = "https://www.stevendev.pro/api/";
-const VUE_APP_STAGINGBASEURL = "http://localhost:8000";
+// const VUE_APP_API_URL = "https://www.stevendev.pro/api/";
+// const VUE_APP_STAGINGBASEURL = "http://localhost:8000";
 
 const Setting = {
   routerMode: "history",
   // 接口请求地址
-  apiBaseURL: VUE_APP_API_URL,
+  apiBaseURL: BASE_RUL,
   //staging 请求地址
-  apiStagingURL: VUE_APP_STAGINGBASEURL,
+  //apiStagingURL: VUE_APP_STAGINGBASEURL,
 
   modalDuration: 3,
   // 接口请求返回错误时，弹窗的类型，可选值为 Message 或 Notice
