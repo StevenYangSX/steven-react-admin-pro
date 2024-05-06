@@ -3,7 +3,7 @@ import { Breadcrumb } from "antd";
 import { Link, Location, useLocation } from "react-router-dom";
 import { BreadcrumbItemType } from "antd/es/breadcrumb/Breadcrumb";
 
-const BreadCrumb: React.FC = () => {
+const BreadCrumbWrap: React.FC = () => {
   let location = useLocation();
   const [items, setItems] = useState<Partial<BreadcrumbItemType>[]>();
   useEffect(() => {
@@ -28,9 +28,14 @@ const BreadCrumb: React.FC = () => {
 
   return (
     <>
-      <Breadcrumb style={{ margin: "0 0 0 16px" }} items={items} />
+      <Breadcrumb
+        items={items}
+        style={{
+          margin: "0 0 0 16px",
+        }}
+      />
     </>
   );
 };
 
-export default BreadCrumb;
+export default BreadCrumbWrap;

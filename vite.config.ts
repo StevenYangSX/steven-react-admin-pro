@@ -4,6 +4,11 @@ import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  // define:{
+  //   'process.env':{
+  //     APP_API_BASE_URL : JSON.stringify(process.env.API_BASE_URL)
+  //   }
+  // },
   plugins: [react(),
      // Custom plugin to load markdown files
     {

@@ -1,3 +1,6 @@
+import { SorterResult } from "antd/lib/table/interface";
+import { SystemCustomerType } from "./systemDataTypes";
+
 export interface LoginRequestType {
   username: string;
   password: string;
@@ -52,4 +55,13 @@ export interface AddSystemUserRequestType {
 
 export interface UpdateSystemUserRequestType extends AddSystemUserRequestType {
   userId:number
+}
+
+
+export interface PageableRequestType {
+  current?:number,
+  pageSize?:number,
+  sort?: SorterResult<SystemCustomerType> |  SorterResult<SystemCustomerType>[],
+  total?:number
+
 }
