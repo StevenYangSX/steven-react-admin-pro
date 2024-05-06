@@ -1,7 +1,8 @@
 // const VUE_APP_API_URL = process.env.VUE_APP_BASEURL;
 // const VUE_APP_STAGINGBASEURL = process.env.VUE_APP_STAGINGBASEURL;
-const BASE_RUL = import.meta.env.API_BASE_URL;
 
+const BASE_RUL = import.meta.env.VITE_API_BASE_URL ;
+console.log("check sdfsdfs",BASE_RUL);
 // const VUE_APP_API_URL = "https://www.stevendev.pro/api/";
 // const VUE_APP_STAGINGBASEURL = "http://localhost:8000";
 

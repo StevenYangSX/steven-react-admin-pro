@@ -6,7 +6,7 @@ axios.defaults.validateStatus = customValidateStatus;
 // 创建一个 axios 实例
 const axiosInstance = axios.create({
   baseURL: Setting.apiBaseURL,
-  timeout: 30, // 请求超时时间
+  timeout: 3000, // 请求超时时间
 
 });
 
