@@ -6,6 +6,7 @@ import { Divider, Row, Col, Button, message } from "antd";
 import { useEffect, useState, useRef } from "react";
 import { updateSseStatus } from "@/api/sseStatus";
 import UserTable from "@/components/dashBoard/UserTable";
+import Setting from "@/setting";
 const style: React.CSSProperties = {
   height: "250px",
   minWidth: "300px",
@@ -48,7 +49,7 @@ const DashBoard = () => {
   useEffect(() => {
     var sseStatusEvent: EventSource | undefined;
     var sseDataEvent: EventSource | undefined;
-    sseStatusEvent = new EventSource("http://localhost:8000/sse/status");
+    sseStatusEvent = new EventSource(`${Setting.apiBaseURL}sse/status`);
     sseStatusEvent.onmessage = (event) => {
       if (event.data === "true" && !syncStatus) {
         setSyncStatus(true);
@@ -58,7 +59,7 @@ const DashBoard = () => {
       }
     };
     if (syncStatus) {
-      sseDataEvent = new EventSource("http://localhost:8000/sse/test");
+      sseDataEvent = new EventSource(`${Setting.apiBaseURL}sse/status`);
       sseDataEvent.onmessage = (event) => {
         let sseDataParsed = JSON.parse(event.data);
         setBarData(sseDataParsed.barchartData);
