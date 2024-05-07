@@ -4,7 +4,6 @@ import BasicRadarChart from "@/components/dashBoard/BasicRadarChart";
 import ExampleBarChart from "@/components/dashBoard/ExampleBarChart";
 import { Divider, Row, Col, Button, message } from "antd";
 import { useEffect, useState, useRef } from "react";
-import { updateSseStatus } from "@/api/sseStatus";
 import UserTable from "@/components/dashBoard/UserTable";
 import Setting from "@/setting";
 const style: React.CSSProperties = {
@@ -12,7 +11,7 @@ const style: React.CSSProperties = {
   minWidth: "300px",
 };
 const DashBoard = () => {
-  const [messageApi, messageContext] = message.useMessage();
+  const [_messageApi, messageContext] = message.useMessage();
   const [span, setSpan] = useState(6);
   const [barData, setBarData] = useState([15, 25, 55, 232, 123, 19, 180]);
   const [guageData, setGuageData] = useState(50);
@@ -47,19 +46,18 @@ const DashBoard = () => {
   }, []); // Empty dependency array to run effect only once on mount
 
   useEffect(() => {
-    var sseStatusEvent: EventSource | undefined;
     var sseDataEvent: EventSource | undefined;
-    sseStatusEvent = new EventSource(`${Setting.apiBaseURL}sse/status`);
-    sseStatusEvent.onmessage = (event) => {
-      if (event.data === "true" && !syncStatus) {
-        setSyncStatus(true);
-      }
-      if (event.data === "false" && syncStatus) {
-        setSyncStatus(false);
-      }
-    };
+    // sseStatusEvent = new EventSource(`${Setting.apiBaseURL}sse/status`);
+    // sseStatusEvent.onmessage = (event) => {
+    //   if (event.data === "true" && !syncStatus) {
+    //     setSyncStatus(true);
+    //   }
+    //   if (event.data === "false" && syncStatus) {
+    //     setSyncStatus(false);
+    //   }
+    // };
     if (syncStatus) {
-      sseDataEvent = new EventSource(`${Setting.apiBaseURL}sse/status`);
+      sseDataEvent = new EventSource(`${Setting.apiBaseURL}sse/test`);
       sseDataEvent.onmessage = (event) => {
         let sseDataParsed = JSON.parse(event.data);
         setBarData(sseDataParsed.barchartData);
@@ -71,19 +69,20 @@ const DashBoard = () => {
       sseDataEvent?.close();
     }
     return () => {
-      sseStatusEvent?.close();
+      // sseStatusEvent?.close();
       sseDataEvent?.close();
     };
   }, [syncStatus]);
 
   const changeSyncStatus = () => {
-    updateSseStatus(syncStatus ? "false" : "true")
-      .then((res) => {
-        messageApi.success("Data sync is Switched " + res.message);
-      })
-      .catch((_err) => {
-        messageApi.error("Server has error on data sync status");
-      });
+    // updateSseStatus(syncStatus ? "false" : "true")
+    //   .then((res) => {
+    //     messageApi.success("Data sync is Switched " + res.message);
+    //   })
+    //   .catch((_err) => {
+    //     messageApi.error("Server has error on data sync status");
+    //   });
+    setSyncStatus(!syncStatus);
   };
 
   return (
