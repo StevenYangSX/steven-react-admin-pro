@@ -19,7 +19,7 @@ const TechIconCard = ({
         }}
       >
         <img style={{ width: "64", height: "64px" }} src={imgSrc} alt={altImgSrc} />
-        <p>{title}</p>
+        <p style={{ marginTop: "16px" }}>{title}</p>
       </div>
     </>
   );
