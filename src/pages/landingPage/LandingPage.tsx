@@ -72,11 +72,10 @@ const LandingPage = () => {
         // Open google.ca in a new tab
         window.open("https://www.linkedin.com/in/steven-yang-30063a193/", "_blank");
         return;
-
       case 2:
         // Open google.ca in a new tab
         window.open(
-          "https://drive.google.com/file/d/1Q6NqaYr0HSJqO26ZTU6MfKc0xzmMyfT3/view?usp=sharing",
+          "https://www.canva.com/design/DAGEyElQFOw/iEVAn44vH-7S2r5NfDhYeQ/view?utm_content=DAGEyElQFOw&utm_campaign=designshare&utm_medium=link&utm_source=editor",
           "_blank"
         );
         return;
