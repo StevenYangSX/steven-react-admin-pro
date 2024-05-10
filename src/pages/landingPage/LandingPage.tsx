@@ -75,7 +75,7 @@ const LandingPage = () => {
       case 2:
         // Open google.ca in a new tab
         window.open(
-          "https://www.canva.com/design/DAGEyElQFOw/iEVAn44vH-7S2r5NfDhYeQ/view?utm_content=DAGEyElQFOw&utm_campaign=designshare&utm_medium=link&utm_source=editor",
+          "https://drive.google.com/file/d/1IsTa0A1nxrmkOLrq33W1-_GDj6HO_T12/view?usp=drive_link",
           "_blank"
         );
         return;
