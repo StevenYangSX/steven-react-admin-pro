@@ -3,6 +3,8 @@ import type { DescriptionsProps } from "antd";
 import { Image, Tag } from "antd";
 import adminDeliveryImg from "@/assets/images/unione-admin-delivery.png";
 import adminReportImg from "@/assets/images/unione-admin-report.png";
+import adminConfigImg from "@/assets/images/unione-admin-config.png";
+import aiCityImg from "@/assets/images/ai-city.jpg";
 const itemsUnione: DescriptionsProps["items"] = [
   {
     label: "Compony",
@@ -33,9 +35,9 @@ const itemsUnione: DescriptionsProps["items"] = [
             <Tag color="processing">Springboot</Tag>
           </li>
           <li>
-            Developed and maintained multi-platform websites and mobile apps for clients, leveraging
-            Uni-app, Vue, and Vuex to ensure seamless user experiences across various devices and
-            platforms.
+            Developed and maintained B2B and B2C multi-platform websites and mobile apps for
+            clients, leveraging Uni-app and Vue to ensure seamless user experiences across various
+            devices and platforms.
           </li>
           <li>
             Designed and implemented an intuitive and efficient admin site for internal company use,
@@ -60,20 +62,22 @@ const itemsUnione: DescriptionsProps["items"] = [
       <>
         <ul>
           <li>
-            Successfully built and deployed a multi-platform website and mobile app solution,
-            enhancing accessibility and user engagement for clients.
+            Successfully built and deployed multi-platform websites and mobile app solutions which
+            provide services to over 30,000 individual customers and 200 companies.
           </li>
           <li>
-            Developed an intuitive admin site with comprehensive functionality, streamlining
-            internal processes and facilitating efficient management of client-side web activities.
+            Admin-side webs have user-friendly interfaces and functionalities for employees across
+            different departments, including complex order delivery task management system,
+            financial report system, and app decoration system for dynamically configuring
+            client-side content.
           </li>
           <li>
             Implemented performance improvements resulting in enhanced speed and responsiveness
             across web platforms, contributing to improved user satisfaction and retention.
           </li>
           <li>
-            Tailored the admin site to meet the specific needs of different departments, enhancing
-            workflow efficiency and productivity company-wide.
+            Refactored some vital APIs for client-side and admin-side applications, which improved
+            the stability and maintainability.
           </li>
         </ul>
       </>
@@ -110,20 +114,12 @@ const itemsLuculent: DescriptionsProps["items"] = [
           </li>
           <li>
             Developed and maintained a data visualization web for "Smart City Command Center of
-            Chifeng City", leveraging Uni-app, Vue, and Vuex to ensure seamless user experiences
-            across various devices and platforms.
+            Chifeng City", using React and Echarts based on Server-side-events to achieve dynamic
+            real-time data updates.
           </li>
           <li>
-            Designed and implemented an intuitive and efficient admin site for internal company use,
-            utilizing Vue.js and View Design.
-          </li>
-          <li>
-            Played a key role in improving the performance of web applications through diligent
-            optimization efforts and adherence to best practices.
-          </li>
-          <li>
-            Collaborated closely with backend developers and tech leader, contributed efferts on
-            Restful-API development when necessary.
+            Created data report figures generation tools for data analysts to present daily data
+            reports.
           </li>
         </ul>
       </>
@@ -136,20 +132,13 @@ const itemsLuculent: DescriptionsProps["items"] = [
       <>
         <ul>
           <li>
-            Successfully built and deployed a multi-platform website and mobile app solution,
-            enhancing accessibility and user engagement for clients.
+            Successfully built and deployed the data visualization web and displayed on the large
+            screen of the Chifeng Smart City Command Center, more than 30 municipal officials from
+            different cities visit for observation.
           </li>
           <li>
-            Developed an intuitive admin site with comprehensive functionality, streamlining
-            internal processes and facilitating efficient management of client-side web activities.
-          </li>
-          <li>
-            Implemented performance improvements resulting in enhanced speed and responsiveness
-            across web platforms, contributing to improved user satisfaction and retention.
-          </li>
-          <li>
-            Tailored the admin site to meet the specific needs of different departments, enhancing
-            workflow efficiency and productivity company-wide.
+            Data figures generator provides convenience for data analysts in generating data
+            reports. Reports are generated and published to relevant platforms daily and weekly.
           </li>
         </ul>
       </>
@@ -163,7 +152,6 @@ const Experience = () => {
         bordered
         column={{ xs: 1, sm: 2, md: 3, lg: 3, xl: 3, xxl: 3 }}
         items={itemsUnione}
-        title="Frontend Developer | Unione Food Group Inc"
       />
 
       <div
@@ -185,7 +173,10 @@ const Experience = () => {
             }}
           >
             <Image width={200} src={adminDeliveryImg} />
+            <Divider type="vertical" />
             <Image width={200} src={adminReportImg} />
+            <Divider type="vertical" />
+            <Image width={200} src={adminConfigImg} />
           </Image.PreviewGroup>
         </div>
       </div>
@@ -194,8 +185,10 @@ const Experience = () => {
         bordered
         column={{ xs: 1, sm: 2, md: 3, lg: 3, xl: 3, xxl: 3 }}
         items={itemsLuculent}
-        title="Frontend Developer | Luculent CHIFENG"
       />
+      <div style={{ marginTop: "26px" }}>
+        <Image src={aiCityImg} />
+      </div>
     </div>
   );
 };

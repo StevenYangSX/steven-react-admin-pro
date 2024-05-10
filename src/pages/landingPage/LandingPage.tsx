@@ -76,7 +76,7 @@ const LandingPage = () => {
       case 2:
         // Open google.ca in a new tab
         window.open(
-          "https://drive.google.com/file/d/1l7ibztP-d7RflCq-jEApBdZsdhMHlua2/view",
+          "https://drive.google.com/file/d/1Q6NqaYr0HSJqO26ZTU6MfKc0xzmMyfT3/view?usp=sharing",
           "_blank"
         );
         return;
