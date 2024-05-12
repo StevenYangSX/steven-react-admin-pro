@@ -114,7 +114,7 @@ const Page = () => {
         {loginType === "account" && (
           <>
             <ProFormText
-              initialValue="admin"
+              initialValue="demo"
               name="username"
               fieldProps={{
                 size: "large",
