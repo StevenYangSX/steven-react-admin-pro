@@ -1,17 +1,13 @@
 import { loginApi } from "@/api/authentication";
 import { getSystemMenusApi } from "@/api/systemMenu";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import {
-  LoginFormPage,
-  ProConfigProvider,
-  ProFormCheckbox,
-  ProFormText,
-} from "@ant-design/pro-components";
-import { Button, message, theme } from "antd";
+import { LoginFormPage, ProConfigProvider, ProFormText } from "@ant-design/pro-components";
+import { message, theme } from "antd";
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { userLogin, systemMenuUpdate } from "@/store/slices/userInfoSlice";
 import { useAppSelector } from "@/hooks/reduxHooks";
+import logoImg from "@/assets/images/logo.png";
 type LoginType = "phone" | "account";
 
 const Page = () => {
@@ -61,6 +57,11 @@ const Page = () => {
     >
       {contextHolder}
       <LoginFormPage
+        submitter={{
+          searchConfig: {
+            submitText: "LOGIN",
+          },
+        }}
         loading={loading}
         disabled={!serverStatus}
         onFinish={async (values) => {
@@ -69,38 +70,38 @@ const Page = () => {
           return true;
         }}
         backgroundImageUrl="https://mdn.alipayobjects.com/huamei_gcee1x/afts/img/A*y0ZTS6WLwvgAAAAAAAAAAAAADml6AQ/fmt.webp"
-        logo="https://github.githubassets.com/images/modules/logos_page/Octocat.png"
+        logo={logoImg}
         backgroundVideoUrl="https://gw.alipayobjects.com/v/huamei_gcee1x/afts/video/jXRBRK_VAwoAAAAAAAAAAAAAK4eUAQBr"
         title="React Admin"
         containerStyle={{
           backgroundColor: "rgba(0, 0, 0,0.65)",
           backdropFilter: "blur(4px)",
         }}
-        subTitle="Steven-React-Admin-Pro"
-        activityConfig={{
-          style: {
-            boxShadow: "0px 0px 8px rgba(0, 0, 0, 0.2)",
-            color: token.colorTextHeading,
-            borderRadius: 8,
-            backgroundColor: "rgba(255,255,255,0.25)",
-            backdropFilter: "blur(4px)",
-          },
-          title: "活动标题，可配置图片",
-          subTitle: "活动介绍说明文字",
-          action: (
-            <Button
-              size="large"
-              style={{
-                borderRadius: 20,
-                background: token.colorBgElevated,
-                color: token.colorPrimary,
-                width: 120,
-              }}
-            >
-              去看看
-            </Button>
-          ),
-        }}
+        subTitle="General admin system template"
+        // activityConfig={{
+        //   style: {
+        //     boxShadow: "0px 0px 8px rgba(0, 0, 0, 0.2)",
+        //     color: token.colorTextHeading,
+        //     borderRadius: 8,
+        //     backgroundColor: "rgba(255,255,255,0.25)",
+        //     backdropFilter: "blur(4px)",
+        //   },
+        //   title: "活动标题，可配置图片",
+        //   subTitle: "活动介绍说明文字",
+        //   action: (
+        //     <Button
+        //       size="large"
+        //       style={{
+        //         borderRadius: 20,
+        //         background: token.colorBgElevated,
+        //         color: token.colorPrimary,
+        //         width: 120,
+        //       }}
+        //     >
+        //       去看看
+        //     </Button>
+        //   ),
+        // }}
       >
         {/* <Tabs
           centered
@@ -164,7 +165,7 @@ const Page = () => {
             marginBlockEnd: 24,
           }}
         >
-          <ProFormCheckbox noStyle name="autoLogin">
+          {/* <ProFormCheckbox noStyle name="autoLogin">
             自动登录
           </ProFormCheckbox>
           <a
@@ -173,7 +174,7 @@ const Page = () => {
             }}
           >
             忘记密码
-          </a>
+          </a> */}
         </div>
       </LoginFormPage>
     </div>
