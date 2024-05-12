@@ -45,11 +45,11 @@ const MenuManagement = () => {
         try {
           const response = await deleteMenuByIdApi({ menuId });
           messageApi.success(response.message);
+          dispatch(fetchSystemMenuList());
         } catch (error: any) {
           messageApi.error(error.message);
         } finally {
           setPageLoading(false);
-          dispatch(fetchSystemMenuList());
         }
       }
     }
@@ -251,13 +251,13 @@ const MenuManagement = () => {
         const response = await modifyMenuItemApi(payload);
         messageApi.success(response.message);
       }
+      dispatch(fetchSystemMenuList());
+      dispatch(fetchUserAccessList(0));
     } catch (error: any) {
       messageApi.error(error.message);
     } finally {
       setOpen(false);
       setConfirmLoading(false);
-      dispatch(fetchSystemMenuList());
-      dispatch(fetchUserAccessList(0));
       form.resetFields();
     }
   };

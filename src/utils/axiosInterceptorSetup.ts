@@ -53,6 +53,7 @@ import { catchAuthorizationError } from "@/store/slices/userInfoSlice";
           },
           (error) => {
             // const navigate = useNavigate();
+            console.log("check error...",error)
             if (error && !error.response) {
               return Promise.reject(error);
             }
@@ -68,8 +69,7 @@ import { catchAuthorizationError } from "@/store/slices/userInfoSlice";
                   error.message = "未授权，请登录";
                   break;
                 case 403:
-                  error.message = "拒绝访问";
-                  break;
+                  return Promise.reject({message:"No permission for this API"})
                 case 404:
                   error.message = `请求地址出错: ${error.response.config.url}`;
                   break;
