@@ -10,15 +10,19 @@ export default function useAuthentication() {
   const userToken = useSelector((state:RootState) => state.userInfoReducer.token)
   const userInfo = useSelector((state:RootState) =>state.userInfoReducer.userInfo )
   useEffect(() => {
-   
-    if(userToken && userInfo) {
-      setAuthenticated(true);
-    } else {
-    
-      setAuthenticated(false)   
-    }
-    setLoading(false);
+    const checkAuth = async () => {
+      // Assume there's some delay in getting userToken and userInfo
+      setLoading(true);
+      if (userToken && userInfo) {
+        setAuthenticated(true);
+      } else {
+        setAuthenticated(false);
+      }
+      
+      setLoading(false);
+    };
 
+    checkAuth();
   }, [userToken]);
 
   return {authenticated,loading};
