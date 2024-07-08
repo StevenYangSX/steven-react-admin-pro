@@ -134,7 +134,6 @@ const UserTable = () => {
     _filters,
     sorter: SorterResult<SystemCustomerType> | SorterResult<SystemCustomerType>[]
   ) => {
-    console.log("sorted...", sorter);
     setPageableParams({
       ...pageableParams,
       current: pagination.current,

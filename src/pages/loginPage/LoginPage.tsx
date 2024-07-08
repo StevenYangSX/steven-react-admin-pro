@@ -39,6 +39,7 @@ const Page = () => {
         setLoggedIn(true);
       })
       .catch((err) => {
+        console.log("dfdfdf", err);
         messageApi.open({
           type: "error",
           content: err.message,

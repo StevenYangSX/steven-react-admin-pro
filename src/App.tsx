@@ -18,13 +18,17 @@ const BeforeRouterEnter = () => {
     if (!loading) {
       if (currentPath.pathname === "/login" && authenticated) {
         return navigate("/home");
-      }
-      if (currentPath.pathname !== "/login" && !authenticated) {
+      } else if (currentPath.pathname !== "/login" && !authenticated) {
         return navigate("/login");
       }
     }
   }, [currentPath.pathname, authenticated, loading]);
-  return outlet;
+
+  if (loading) {
+    return null;
+  } else {
+    return outlet;
+  }
 };
 
 function App() {
